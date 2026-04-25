@@ -63,7 +63,6 @@ export default function WinningItems() {
         {/* Winner Cards List */}
         <div className="space-y-10">
           {myWinningHistory.map((item, index) => {
-            const hasBonus = item.rank === 2;
             const rankText = `${item.rank}등 당첨`;
             const formattedPrize = `₩${item.prizeAmount.toLocaleString('ko-KR')}`;
             const drawDateLabel = `${item.drawDate.substring(0, 4)}년 ${item.drawDate.substring(5, 7)}월 ${item.drawDate.substring(8, 10)}일 추첨`;
