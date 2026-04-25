@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@400;500;600&amp;family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#f0eee9",
+                        "secondary-container": "#e4e2e1",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#d0c5af",
+                        "on-tertiary-fixed-variant": "#584400",
+                        "surface-container-highest": "#e4e2dd",
+                        "outline": "#7f7663",
+                        "on-primary-fixed-variant": "#574500",
+                        "surface-container-low": "#f5f3ee",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "tertiary-container": "#cdb061",
+                        "surface-tint": "#735c00",
+                        "on-secondary-container": "#656464",
+                        "on-primary-fixed": "#241a00",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface-dim": "#dbdad5",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f4",
+                        "surface-container-high": "#eae8e3",
+                        "tertiary-fixed-dim": "#e1c472",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-background": "#1b1c19",
+                        "on-tertiary-container": "#554300",
+                        "on-primary-container": "#554300",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#e9c349",
+                        "background": "#fbf9f4",
+                        "tertiary": "#725c14",
+                        "on-tertiary-fixed": "#241a00",
+                        "surface-variant": "#e4e2dd",
+                        "secondary": "#5f5e5e",
+                        "inverse-primary": "#e9c349",
+                        "surface": "#fbf9f4",
+                        "primary-container": "#d4af37",
+                        "on-surface": "#1b1c19",
+                        "inverse-surface": "#30312e",
+                        "secondary-fixed": "#e4e2e1",
+                        "primary": "#735c00",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffe08b",
+                        "primary-fixed": "#ffe088",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#4d4635"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "Noto Sans KR"],
+                        "body": ["Work Sans", "Noto Sans KR"],
+                        "label": ["Work Sans", "Noto Sans KR"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(251, 249, 244, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .winning-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+        body {
+            font-family: 'Work Sans', 'Noto Sans KR', sans-serif;
+            background-color: #fbf9f4;
+            color: #1b1c19;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
+<h1 class="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-['Manrope'] font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제1150회차</span>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- New Title Area -->
+<div class="mb-4">
+<h2 class="text-3xl font-['Noto_Sans_KR'] font-bold text-on-surface tracking-tight">나의 행운 관리</h2>
+<p class="text-sm font-['Noto_Sans_KR'] font-medium text-on-surface-variant mt-2">관리 중인 번호 조합과 당첨 기록입니다</p></div>
+<!-- Tab Navigation (Contextual) -->
+<div class="sticky top-20 z-40 bg-background/80 backdrop-blur-md pb-4 pt-2 -mx-2 px-2 mb-6">
+<div class="flex p-1.5 bg-surface-container-low rounded-2xl">
+<button class="flex-1 py-3 text-sm font-bold rounded-xl text-on-surface-variant hover:text-on-surface transition-all">최근 항목</button>
+<button class="flex-1 py-3 text-sm font-bold rounded-xl bg-surface-container-lowest text-primary shadow-sm transition-all">당첨 항목</button>
+</div>
+</div>
+<!-- Header Summary Card: Glassmorphism -->
+<section class="glass-card rounded-lg p-8 mb-12 shadow-[0_40px_40px_rgba(27,28,25,0.04)] border border-white/20">
+<div class="flex flex-col gap-2">
+<span class="text-on-surface-variant font-label text-sm font-medium">총 당첨 금액</span>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-headline font-extrabold text-primary-container">₩2,450,000</span>
+<span class="text-on-surface-variant font-body text-lg">원</span>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-3">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-white font-bold border-2 border-surface">1st</div>
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-[10px] text-white font-bold border-2 border-surface">3rd</div>
+<div class="w-8 h-8 rounded-full bg-outline-variant flex items-center justify-center text-[10px] text-white font-bold border-2 border-surface">4th</div>
+</div>
+<span class="text-xs text-on-surface-variant font-label">총 12회의 행운이 함께했습니다.</span>
+</div>
+</section>
+<!-- Winner Cards List -->
+<div class="space-y-10">
+<!-- Winner Card 1 -->
+<article class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_10px_40px_rgba(27,28,25,0.02)] border border-outline-variant/10 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-lg font-headline font-bold text-on-surface">제1149회차</h3>
+<p class="text-xs text-on-surface-variant font-label">2024년 11월 23일 추첨</p>
+</div>
+<div class="px-4 py-1.5 rounded-full bg-primary-container/10 border border-primary-container/20">
+<span class="text-primary font-bold text-sm">3등 당첨</span>
+</div>
+</div>
+<div class="flex gap-2 mb-8 flex-wrap">
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container ring-offset-2">7</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container ring-offset-2">12</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container ring-offset-2">19</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container ring-offset-2">23</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container ring-offset-2">31</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">45</span>
+</div>
+<div class="flex justify-between items-center pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Prize Amount</span>
+<span class="text-xl font-bold font-headline text-primary">₩1,540,230</span>
+</div>
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high transition-colors px-4 py-2 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-sm">share</span>
+<span class="text-xs font-bold font-label">당첨 소식 공유하기</span>
+</button>
+</div>
+</article>
+<!-- Subtle Ad Space -->
+<aside class="py-4 px-6 bg-surface-container-low/50 rounded-xl border border-dashed border-outline-variant/30 text-center">
+<span class="text-[10px] font-label text-on-surface-variant/40 uppercase tracking-[0.2em] block mb-2">Advertisement</span>
+<div class="h-20 flex items-center justify-center overflow-hidden grayscale opacity-50">
+<img alt="minimalist banner ad" class="max-h-full object-contain" data-alt="clean minimalist corporate banner advertisement with soft shapes and plenty of white space for professional tech service" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANhURQ2U4M4G1y0ZekiGpGlLGbS3PMEVx3mn7q72bBjY-jyhvg2gzB6iSycUWsND41JQz-EMLiYi7v8tbrz5DSSZqxeA1TdFf7SlXqZIOZKBK200QSRyKBABQOFw5g0jCLUJPONbQ5SCPLDX28pZl15LYCuFI8PMblpGt54sUhkqpUJGUf5n-eC37hUPjWo7wDLepjK0P_9y1Ee_eRFxl1xOraCRGzY7WGcbnHFyGObpPkLqy_iwGsJhn8LL8Usq1PkW6jOn5rAlU"/>
+</div>
+</aside>
+<!-- Winner Card 2 -->
+<article class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_10px_40px_rgba(27,28,25,0.02)] border border-outline-variant/10 relative overflow-hidden">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-lg font-headline font-bold text-on-surface">제1145회차</h3>
+<p class="text-xs text-on-surface-variant font-label">2024년 10월 26일 추첨</p>
+</div>
+<div class="px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/20">
+<span class="text-on-surface-variant font-bold text-sm">4등 당첨</span>
+</div>
+</div>
+<div class="flex gap-2 mb-8 flex-wrap">
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/40 ring-offset-2">2</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/40 ring-offset-2">11</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/40 ring-offset-2">28</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">33</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/40 ring-offset-2">39</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">44</span>
+</div>
+<div class="flex justify-between items-center pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Prize Amount</span>
+<span class="text-xl font-bold font-headline text-on-surface">₩50,000</span>
+</div>
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high transition-colors px-4 py-2 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-sm">share</span>
+<span class="text-xs font-bold font-label">당첨 소식 공유하기</span>
+</button>
+</div>
+</article>
+<!-- Winner Card 3 -->
+<article class="bg-surface-container-lowest rounded-lg p-6 shadow-[0_10px_40px_rgba(27,28,25,0.02)] border border-outline-variant/10 relative overflow-hidden">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-lg font-headline font-bold text-on-surface">제1138회차</h3>
+<p class="text-xs text-on-surface-variant font-label">2024년 09월 07일 추첨</p>
+</div>
+<div class="px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/20">
+<span class="text-on-surface-variant font-bold text-sm">5등 당첨</span>
+</div>
+</div>
+<div class="flex gap-2 mb-8 flex-wrap">
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/20 ring-offset-2">1</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">15</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/20 ring-offset-2">22</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">29</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high text-on-surface font-bold font-headline text-sm winning-glow ring-2 ring-primary-container/20 ring-offset-2">35</span>
+<span class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant/40 font-bold font-headline text-sm">41</span>
+</div>
+<div class="flex justify-between items-center pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant font-label uppercase tracking-widest">Prize Amount</span>
+<span class="text-xl font-bold font-headline text-on-surface">₩5,000</span>
+</div>
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high transition-colors px-4 py-2 rounded-full active:scale-95">
+<span class="material-symbols-outlined text-sm">share</span>
+<span class="text-xs font-bold font-label">당첨 소식 공유하기</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-[#fbf9f4]/70 dark:bg-[#1b1c19]/70 backdrop-blur-xl z-50 rounded-t-[2rem] border-t border-[#d0c5af]/15 shadow-[0_-10px_40px_rgba(27,28,25,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] dark:hover:text-[#d4af37] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wider mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#735c00] to-[#d4af37] text-white rounded-full p-3 scale-110 -translate-y-2 shadow-lg active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wider mt-1">My Records</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] dark:hover:text-[#d4af37] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wider mt-1">Results</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] dark:hover:text-[#d4af37] active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-wider mt-1">More</span>
+</a>
+</nav>
+</body></html>

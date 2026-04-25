@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>비밀번호 찾기 - 인증번호 확인</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Work+Sans:wght@400;500&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#d0c5af",
+              "on-primary-container": "#554300",
+              "on-secondary": "#ffffff",
+              "secondary": "#5f5e5e",
+              "on-secondary-fixed": "#1b1c1c",
+              "surface-dim": "#dbdad5",
+              "surface-container-highest": "#e4e2dd",
+              "surface-container-high": "#eae8e3",
+              "secondary-fixed-dim": "#c8c6c5",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#7f7663",
+              "surface-container": "#f0eee9",
+              "primary-container": "#d4af37",
+              "primary-fixed": "#ffe088",
+              "on-tertiary-container": "#554300",
+              "surface-tint": "#735c00",
+              "secondary-fixed": "#e4e2e1",
+              "on-primary-fixed-variant": "#574500",
+              "secondary-container": "#e4e2e1",
+              "inverse-primary": "#e9c349",
+              "tertiary-fixed": "#ffe08b",
+              "background": "#fbf9f4",
+              "tertiary": "#725c14",
+              "tertiary-container": "#cdb061",
+              "primary-fixed-dim": "#e9c349",
+              "on-primary": "#ffffff",
+              "inverse-on-surface": "#f2f1ec",
+              "tertiary-fixed-dim": "#e1c472",
+              "on-error": "#ffffff",
+              "on-error-container": "#93000a",
+              "surface-container-low": "#f5f3ee",
+              "on-secondary-container": "#656464",
+              "surface-bright": "#fbf9f4",
+              "on-tertiary-fixed-variant": "#584400",
+              "on-primary-fixed": "#241a00",
+              "surface": "#fbf9f4",
+              "on-surface": "#1b1c19",
+              "primary": "#735c00",
+              "on-tertiary-fixed": "#241a00",
+              "error": "#ba1a1a",
+              "error-container": "#ffdad6",
+              "on-tertiary": "#ffffff",
+              "on-surface-variant": "#4d4635",
+              "on-secondary-fixed-variant": "#474747",
+              "surface-variant": "#e4e2dd",
+              "on-background": "#1b1c19",
+              "inverse-surface": "#30312e",
+              "brand-orange": "#D4AF37"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "Noto Sans KR"],
+              "body": ["Work Sans", "Noto Sans KR"],
+              "label": ["Work Sans", "Noto Sans KR"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', 'Noto Sans KR', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Updated Header: Left-aligned logo, Right-aligned session info -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto relative"><div class="flex items-center w-1/3"><button aria-label="뒤로 가기" class="flex items-center justify-center p-2 -ml-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors"><span class="material-symbols-outlined text-2xl">chevron_left</span></button></div><div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"><span class="text-xl font-black text-primary tracking-tighter font-headline">Win-Way</span></div><div class="flex items-center justify-end w-1/3"><span class="text-sm font-bold text-brand-orange font-body">제1150회차</span></div></div>
+</header>
+<main class="flex-grow flex items-center justify-center px-6 pt-16">
+<div class="w-full max-w-md">
+<!-- Header Section -->
+<div class="mb-10 text-center">
+<h1 class="text-2xl font-bold font-headline text-on-surface mb-3">인증번호 입력</h1>
+<p class="text-on-surface-variant text-sm font-body leading-relaxed">
+                    이메일로 발송된 6자리 인증번호를 입력해 주세요.
+                </p>
+</div>
+<!-- Verification Card -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_20px_40px_rgba(27,28,25,0.04)] relative overflow-hidden">
+<!-- Abstract Gilded Background Detail -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl"></div>
+<form class="space-y-8">
+<!-- Adjusted OTP Input Grid: Guaranteed visibility on 390px screens -->
+<div class="flex justify-between items-center gap-1.5 sm:gap-2">
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" type="text" value="4"/>
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" type="text" value="8"/>
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" placeholder="·" type="text"/>
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" placeholder="·" type="text"/>
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" placeholder="·" type="text"/>
+<input class="w-full aspect-square max-w-[48px] text-center text-xl font-bold bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary-container text-on-surface p-0" maxlength="1" placeholder="·" type="text"/>
+</div>
+<!-- Timer Section -->
+<div class="flex flex-col items-center justify-center space-y-3">
+<div class="flex items-center gap-2 px-4 py-1.5 bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined text-sm text-primary">schedule</span>
+<span class="text-sm font-bold font-body text-primary">3:00</span>
+</div>
+<button class="text-xs text-on-surface-variant underline decoration-outline-variant underline-offset-4 hover:text-primary transition-colors font-body" type="button">
+                            인증번호 재발송
+                        </button>
+</div>
+<!-- Action Button -->
+<button class="w-full h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-full shadow-lg shadow-primary/20 active:scale-[0.98] transition-all duration-200" type="submit">
+                        인증 확인
+                    </button>
+</form>
+</div>
+<!-- Footer Links -->
+<div class="mt-8 text-center">
+<p class="text-xs text-on-surface-variant opacity-60 font-body">
+                    문제가 발생했나요? <a class="text-primary font-medium hover:underline" href="#">고객센터 문의</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Visual Decorative Element (Editorial Asymmetry) -->
+<div class="fixed -bottom-24 -left-24 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl -z-10"></div>
+<div class="fixed top-1/4 -right-16 w-48 h-48 bg-surface-container-highest/50 rounded-full blur-2xl -z-10"></div>
+</body></html>

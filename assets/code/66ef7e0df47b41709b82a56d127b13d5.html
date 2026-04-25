@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;family=Work+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-container": "#656464",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed": "#e4e2e1",
+                        "primary-fixed-dim": "#e9c349",
+                        "outline-variant": "#d0c5af",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#e9c349",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#554300",
+                        "surface-bright": "#fbf9f4",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#30312e",
+                        "primary-fixed": "#ffe088",
+                        "on-primary-container": "#554300",
+                        "background": "#fbf9f4",
+                        "surface": "#fbf9f4",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-primary-fixed": "#241a00",
+                        "tertiary-container": "#cdb061",
+                        "surface-container": "#f0eee9",
+                        "on-surface-variant": "#4d4635",
+                        "surface-container-high": "#eae8e3",
+                        "tertiary-fixed": "#ffe08b",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e4e2dd",
+                        "tertiary": "#725c14",
+                        "secondary": "#5f5e5e",
+                        "surface-tint": "#735c00",
+                        "surface-dim": "#dbdad5",
+                        "tertiary-fixed-dim": "#e1c472",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface-container-low": "#f5f3ee",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1b1c19",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "secondary-container": "#e4e2e1",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#584400",
+                        "primary-container": "#d4af37",
+                        "inverse-on-surface": "#f2f1ec",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#7f7663",
+                        "on-surface": "#1b1c19",
+                        "primary": "#735c00",
+                        "surface-container-highest": "#e4e2dd"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Work Sans"],
+                        "label": ["Noto Sans KR"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(251, 249, 244, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #735c00 0%, #d4af37 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-label antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 dark:shadow-none z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
+<h1 class="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+</div>
+<div class="flex items-center">
+<span class="font-['Manrope'] font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400 active:scale-95 duration-200 hover:opacity-80 transition-opacity cursor-pointer">1150th Round</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-8">
+<!-- Recent Hot Numbers Ticker -->
+<section class="bg-surface-container-low rounded-lg p-4 relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">최근 당첨 번호</span>
+<span class="material-symbols-outlined text-sm text-primary" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex gap-4 items-center animate-scroll">
+<div class="flex gap-3">
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">7</span>
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">14</span>
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">22</span>
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">35</span>
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">41</span>
+<span class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm">44</span>
+</div>
+</div>
+</section>
+<!-- Mode Toggle Section -->
+<section class="flex flex-col items-center gap-6">
+<div class="bg-surface-container-high p-1.5 rounded-full flex items-center w-full max-w-xs shadow-inner">
+<button class="flex-1 py-2.5 rounded-full text-sm font-bold transition-all duration-300 text-on-surface-variant hover:bg-white/50">AI 자동</button>
+<button class="flex-1 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5">스마트 반자동</button>
+</div>
+<div class="text-center space-y-1">
+<h2 class="text-2xl font-headline font-extrabold text-on-surface">고정수 선택</h2>
+<p class="text-sm text-on-surface-variant font-medium">분석을 위한 고정수를 최대 5개 선택하세요</p>
+</div>
+</section>
+<!-- Number Selection Grid (1-45) -->
+<section class="bg-surface-container-low rounded-lg p-8">
+<div class="grid grid-cols-5 sm:grid-cols-7 gap-4">
+<!-- Numbers 1 to 45 generated as a pattern -->
+<!-- Number 1-6 -->
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">1</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">2</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">3</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold gold-gradient text-white shadow-lg shadow-primary/20">4</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">5</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">6</button>
+<!-- Row 2 -->
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">7</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">8</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">9</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">10</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">11</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold gold-gradient text-white shadow-lg shadow-primary/20">12</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">13</button>
+<!-- Row 3 -->
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">14</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">15</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">16</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors text-primary border border-primary/20">17</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">18</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">19</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">20</button>
+<!-- Simplified for brevity, continuing pattern -->
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">21</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold gold-gradient text-white shadow-lg shadow-primary/20">22</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">23</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">24</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">25</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">26</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">27</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">28</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">29</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">30</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">31</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold gold-gradient text-white shadow-lg shadow-primary/20">32</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">33</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">34</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">35</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">36</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">37</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">38</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">39</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">40</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">41</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">42</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">43</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold gold-gradient text-white shadow-lg shadow-primary/20">44</button>
+<button class="w-full aspect-square rounded-full flex items-center justify-center text-sm font-bold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors">45</button>
+</div>
+</section>
+<!-- Insights Bento Grid -->
+<section class="grid grid-cols-2 gap-4">
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-sm">
+<p class="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-tighter mb-2">홀짝 비율</p>
+<div class="flex items-end gap-1">
+<span class="text-2xl font-headline font-black text-on-surface">3:3</span>
+<span class="text-xs text-primary font-bold pb-1 mb-1">안정</span>
+</div>
+</div>
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-sm">
+<p class="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-tighter mb-2">당첨 확률</p>
+<div class="flex items-end gap-1">
+<span class="text-2xl font-headline font-black text-on-surface">84%</span>
+<span class="text-xs text-primary font-bold pb-1 mb-1">높음</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-xs px-6">
+<button class="w-full gold-gradient text-white py-4 rounded-full font-headline font-extrabold text-lg shadow-xl shadow-primary/30 flex items-center justify-center gap-2 active:scale-95 transition-transform"><span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>5개 조합 생성하기</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md rounded-t-[2rem] shadow-[0_-4px_40px_rgba(27,28,25,0.04)]">
+<div class="flex flex-col items-center justify-center bg-amber-100/50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full px-4 py-1 active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-['Noto_Sans_KR'] text-[10px] font-medium">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1 hover:bg-stone-100 dark:hover:bg-stone-800 active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['Noto_Sans_KR'] text-[10px] font-medium">History</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1 hover:bg-stone-100 dark:hover:bg-stone-800 active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-['Noto_Sans_KR'] text-[10px] font-medium">Results</span>
+</div>
+<div class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1 hover:bg-stone-100 dark:hover:bg-stone-800 active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-['Noto_Sans_KR'] text-[10px] font-medium">More</span>
+</div>
+</nav>
+<!-- Background Decorative Elements -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden opacity-30">
+<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary-container/20 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-tertiary-container/20 blur-[100px] rounded-full"></div>
+</div>
+</body></html>

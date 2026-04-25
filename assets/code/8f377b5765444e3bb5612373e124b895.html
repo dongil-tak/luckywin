@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Work+Sans:wght@400;500;600&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface": "#1b1c19",
+              "on-tertiary-fixed": "#241a00",
+              "surface-dim": "#dbdad5",
+              "surface-container": "#f0eee9",
+              "primary": "#735c00",
+              "secondary-container": "#e4e2e1",
+              "tertiary-fixed": "#ffe08b",
+              "surface-bright": "#fbf9f4",
+              "surface-container-highest": "#e4e2dd",
+              "surface-container-low": "#f5f3ee",
+              "secondary-fixed-dim": "#c8c6c5",
+              "surface-container-high": "#eae8e3",
+              "inverse-primary": "#e9c349",
+              "on-surface-variant": "#4d4635",
+              "secondary-fixed": "#e4e2e1",
+              "on-primary-fixed": "#241a00",
+              "tertiary-fixed-dim": "#e1c472",
+              "surface": "#fbf9f4",
+              "on-tertiary-container": "#554300",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "tertiary-container": "#cdb061",
+              "on-error": "#ffffff",
+              "surface-variant": "#e4e2dd",
+              "primary-container": "#d4af37",
+              "on-primary-fixed-variant": "#574500",
+              "on-tertiary-fixed-variant": "#584400",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#474747",
+              "inverse-surface": "#30312e",
+              "on-secondary-container": "#656464",
+              "error-container": "#ffdad6",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "outline": "#7f7663",
+              "on-secondary": "#ffffff",
+              "on-primary-container": "#554300",
+              "inverse-on-surface": "#f2f1ec",
+              "background": "#fbf9f4",
+              "tertiary": "#725c14",
+              "surface-tint": "#735c00",
+              "on-background": "#1b1c19",
+              "on-secondary-fixed": "#1b1c1c",
+              "secondary": "#5f5e5e",
+              "primary-fixed": "#ffe088",
+              "outline-variant": "#d0c5af",
+              "primary-fixed-dim": "#e9c349"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "Noto Sans KR"],
+              "body": ["Work Sans", "Noto Sans KR"],
+              "label": ["Work Sans", "Noto Sans KR"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-pulse {
+            box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+        .radar-line {
+            stroke-dasharray: 4;
+            opacity: 0.2;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
+<h1 class="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-['Manrope'] font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제1150회차</span>
+</div>
+</header>
+<main class="pt-24 px-6 space-y-8 max-w-md mx-auto">
+<!-- Mode Selector Segmented Control -->
+<div class="bg-surface-container-low p-1.5 rounded-full flex items-center">
+<button class="flex-1 py-2.5 rounded-full text-sm font-semibold text-on-surface-variant transition-all hover:bg-surface-container-high active:scale-95 transition-all duration-200 cursor-pointer">수동 분석</button>
+<button class="flex-1 py-2.5 rounded-full text-sm font-bold bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5">AI 자동</button>
+</div>
+<!-- AI Analysis Module (The Black Box) -->
+<section class="relative space-y-6">
+<div class="bg-surface-container-lowest rounded-lg p-8 shadow-[0_-4px_40px_rgba(27,28,25,0.02)] relative overflow-hidden">
+<!-- Frequency Heatmap Background Overlay -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#735c00 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<span class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1 block">Neural Engine Status</span>
+<h2 class="text-2xl font-headline font-extrabold tracking-tight">AI 분석 엔진</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary ai-pulse"></span>
+<span class="text-xs font-semibold text-primary">Active</span>
+</div>
+</div>
+<!-- Radar Chart Visualizer -->
+<div class="relative flex justify-center items-center py-10">
+<svg class="w-full max-w-[240px] drop-shadow-xl" viewbox="0 0 200 200">
+<!-- Background Circles -->
+<circle class="text-outline-variant radar-line" cx="100" cy="100" fill="none" r="90" stroke="currentColor" stroke-width="1"></circle>
+<circle class="text-outline-variant radar-line" cx="100" cy="100" fill="none" r="60" stroke="currentColor" stroke-width="1"></circle>
+<circle class="text-outline-variant radar-line" cx="100" cy="100" fill="none" r="30" stroke="currentColor" stroke-width="1"></circle>
+<!-- Radar Lines -->
+<line class="text-outline-variant radar-line" stroke="currentColor" stroke-width="1" x1="100" x2="100" y1="10" y2="190"></line>
+<line class="text-outline-variant radar-line" stroke="currentColor" stroke-width="1" x1="10" x2="190" y1="100" y2="100"></line>
+<!-- Data Polygon -->
+<polygon fill="url(#goldGradient)" fill-opacity="0.2" points="100,40 160,80 140,150 60,150 40,80" stroke="#735c00" stroke-width="2"></polygon>
+<!-- Data Points -->
+<circle cx="100" cy="40" fill="#735c00" r="4"></circle>
+<circle cx="160" cy="80" fill="#735c00" r="4"></circle>
+<circle cx="140" cy="150" fill="#d4af37" r="4"></circle>
+<circle cx="60" cy="150" fill="#d4af37" r="4"></circle>
+<circle cx="40" cy="80" fill="#735c00" r="4"></circle>
+<defs>
+<lineargradient id="goldGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#735c00;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#d4af37;stop-opacity:1"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Central AI Icon -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white shadow-lg ai-pulse ring-8 ring-white/50">
+<span class="material-symbols-outlined text-3xl" data-icon="psychology" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+</div>
+</div>
+<!-- Labels around radar -->
+<div class="grid grid-cols-2 gap-4 mt-4 relative z-10">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="text-[11px] font-medium text-on-surface-variant">Hot Numbers (강세)</span>
+</div>
+<div class="flex items-center gap-2 justify-end">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+<span class="text-[11px] font-medium text-on-surface-variant">Cold Numbers (약세)</span>
+</div>
+</div>
+</div>
+<!-- AI Insight Cards -->
+<div class="space-y-4">
+<div class="bg-surface-container-low rounded-lg p-5 flex items-center gap-4 border-l-4 border-primary">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="search_insights">search_insights</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">10년치 패턴 분석 중...</p>
+<p class="text-xs text-on-surface-variant">과거 520개 회차의 상관관계를 계산하고 있습니다.</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">최적의 확률 발견</p>
+<p class="text-xs text-on-surface-variant">최근 미출현 번호와 이월수의 균형을 맞췄습니다.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Google Adsense Banner Placeholder -->
+<section class="flex flex-col items-center space-y-2">
+<span class="text-[9px] font-bold text-outline uppercase tracking-widest opacity-50">Advertisement</span>
+<div class="w-full h-[50px] bg-surface-container-high border border-outline-variant rounded flex items-center justify-center overflow-hidden">
+<p class="text-xs font-medium text-on-surface-variant/40 italic">AD Banner Area (320x50)</p>
+</div>
+</section>
+<!-- Dynamic Feedback Text -->
+<div class="text-center py-4">
+<p class="text-sm font-medium text-primary tracking-wide flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg animate-spin" data-icon="progress_activity" style="animation-duration: 3s;">progress_activity</span>
+            AI 엔진 가동 중
+        </p>
+</div>
+</main>
+<!-- Floating Action Button Area -->
+<div class="fixed bottom-28 left-0 w-full px-6 z-40">
+<button class="w-full bg-gradient-to-br from-[#735c00] to-[#d4af37] text-white font-headline font-extrabold text-lg py-5 rounded-full shadow-2xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="magic_button" style="font-variation-settings: 'FILL' 1;">magic_button</span>
+        5개 조합 생성하기
+    </button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-[#fbf9f4]/70 dark:bg-[#1b1c19]/70 backdrop-blur-xl z-50 rounded-t-[2rem] shadow-[0_-4px_40px_rgba(27,28,25,0.04)]">
+<!-- Dashboard (Active) -->
+<div class="flex flex-col items-center justify-center bg-gradient-to-br from-[#735c00] to-[#d4af37] text-white rounded-full p-3 shadow-lg active:scale-90 duration-300">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+</div>
+<!-- History -->
+<div class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="history">history</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-widest">내 기록</span>
+</div>
+<!-- Winning Results -->
+<div class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="stars">stars</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-widest">당첨 결과</span>
+</div>
+<!-- More -->
+<div class="flex flex-col items-center justify-center text-[#4d4635] dark:text-[#d0c5af] p-2 hover:text-[#735c00] transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="more_horiz">more_horiz</span>
+<span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-widest">더보기</span>
+</div>
+</nav>
+</body></html>
