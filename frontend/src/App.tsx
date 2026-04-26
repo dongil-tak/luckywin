@@ -20,6 +20,7 @@ import WinningItems from './pages/fortune/WinningItems';
 import SavedNumbers from './pages/saved/SavedNumbers';
 import LuckyHistory from './pages/more/LuckyHistory';
 import LottoStore from './pages/more/LottoStore';
+import Statistics from './pages/more/Statistics';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
       <Route path="/saved" element={<SavedNumbers />} />
       <Route path="/lucky-history" element={<LuckyHistory />} />
       <Route path="/lotto-store" element={<LottoStore />} />
+      <Route path="/statistics" element={<Statistics />} />
     </Routes>
   );
 }

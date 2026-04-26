@@ -69,6 +69,20 @@ export default function BottomNav() {
                 </div>
                 <span className="material-symbols-outlined text-on-surface-variant/40 ml-auto">chevron_right</span>
               </Link>
+              <Link
+                to="/statistics"
+                onClick={() => setShowMore(false)}
+                className="flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-surface-container-high transition-colors"
+              >
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-purple-700" style={{ fontVariationSettings: "'FILL' 1" }}>query_stats</span>
+                </div>
+                <div>
+                  <p className="font-bold text-on-surface text-sm">번호통계</p>
+                  <p className="text-xs text-on-surface-variant">1등 당첨번호 출현 횟수를 확인하세요</p>
+                </div>
+                <span className="material-symbols-outlined text-on-surface-variant/40 ml-auto">chevron_right</span>
+              </Link>
             </div>
           </div>
         </div>
