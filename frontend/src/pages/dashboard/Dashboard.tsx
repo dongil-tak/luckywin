@@ -1,196 +1,181 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+
+const getNumberColorClass = (n: number) => {
+  if (n <= 10) return 'bg-[#facc15] text-[#713f12]';
+  if (n <= 20) return 'bg-[#3b82f6] text-white';
+  if (n <= 30) return 'bg-[#ef4444] text-white';
+  if (n <= 40) return 'bg-[#a1a1aa] text-zinc-900';
+  return 'bg-[#10b981] text-white';
+};
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  // Load persisted numbers from localStorage on first render
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem('fixedNumbers') || '[]');
-    } catch { return []; }
-  });
-  const [saveNumbers, setSaveNumbers] = useState<boolean>(() => {
-    return localStorage.getItem('saveNumbersEnabled') === 'true';
-  });
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const handleGenerate = () => {
-    // Persist if save is enabled, clear otherwise
-    if (saveNumbers) {
-      localStorage.setItem('fixedNumbers', JSON.stringify(selectedNumbers));
-      localStorage.setItem('saveNumbersEnabled', 'true');
-    } else {
-      localStorage.removeItem('fixedNumbers');
-      localStorage.setItem('saveNumbersEnabled', 'false');
-    }
-    setIsGenerating(true);
-    setTimeout(() => {
-      navigate('/dashboard/results', { state: { selectedNumbers } });
-    }, 2000);
-  };
+  const [currentSelection, setCurrentSelection] = useState<number[]>([]);
+  const [savedSets, setSavedSets] = useState<number[][]>([]);
 
   const toggleNumber = (num: number) => {
-    if (selectedNumbers.includes(num)) {
-      setSelectedNumbers(selectedNumbers.filter(n => n !== num));
+    if (savedSets.length >= 5) return; // 5세트 꽉 참
+    
+    if (currentSelection.includes(num)) {
+      setCurrentSelection(currentSelection.filter(n => n !== num));
     } else {
-      if (selectedNumbers.length < 5) {
-        setSelectedNumbers([...selectedNumbers, num]);
-      } else {
-        alert("고정수는 최대 5개까지 선택할 수 있습니다.");
+      if (currentSelection.length < 6) {
+        setCurrentSelection([...currentSelection, num].sort((a, b) => a - b));
       }
     }
   };
 
+  const handleAddSet = () => {
+    if (currentSelection.length === 6 && savedSets.length < 5) {
+      setSavedSets([...savedSets, currentSelection]);
+      setCurrentSelection([]);
+    }
+  };
 
-  // Recent winning history (simulated)
-  const recentDraws = [
-    { round: 1150, date: '2026년 03월 29일', numbers: [7, 14, 22, 35, 41, 44], bonus: 3 },
-    { round: 1149, date: '2026년 03월 22일', numbers: [2, 9, 18, 27, 36, 43], bonus: 11 },
-    { round: 1148, date: '2026년 03월 15일', numbers: [5, 13, 21, 30, 38, 45], bonus: 7 },
-    { round: 1147, date: '2026년 03월 08일', numbers: [1, 10, 19, 28, 37, 42], bonus: 24 },
-    { round: 1146, date: '2026년 03월 01일', numbers: [4, 12, 20, 29, 33, 40], bonus: 15 },
-  ];
-  const [historyIdx, setHistoryIdx] = useState(0);
-  const currentDraw = recentDraws[historyIdx];
-  
+  const handleDeleteSet = (index: number) => {
+    setSavedSets(savedSets.filter((_, i) => i !== index));
+  };
+
+  const handleFinalSave = () => {
+    if (savedSets.length === 0) return;
+    
+    // Save to our management localStorage
+    const entry = {
+      savedAt: new Date().toISOString(),
+      combinations: savedSets,
+      type: 'manual'
+    };
+    const existing = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
+    existing.unshift(entry);
+    localStorage.setItem('savedNumbers', JSON.stringify(existing));
+    
+    navigate('/fortune'); // 저장 후 금주의 당첨현황(행운 관리) 탭으로 이동
+  };
+
+  const slots = Array.from({ length: 6 });
+
   return (
     <div className="bg-background text-on-background font-label antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen">
       {/* TopAppBar */}
       <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 dark:shadow-none z-50">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
-        </div>
-        <div className="flex items-center">
-          <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400 active:scale-95 duration-200 hover:opacity-80 transition-opacity cursor-pointer">1150회차</span>
+          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="edit_square">edit_square</span>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">번호 직접선택</h1>
         </div>
       </header>
 
-      <main className="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-8">
-        <section className="bg-surface-container-low rounded-lg p-4 relative overflow-hidden">
-          {/* Round & Date */}
-          <div className="flex items-center justify-between mb-3">
-            <button
-              onClick={() => setHistoryIdx(i => Math.min(i + 1, recentDraws.length - 1))}
-              disabled={historyIdx === recentDraws.length - 1}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container-lowest disabled:opacity-30 hover:bg-surface-container-high active:scale-90 transition-all"
-            >
-              <span className="material-symbols-outlined text-base text-on-surface">chevron_left</span>
-            </button>
-            <div className="text-center">
-              <p className="text-sm font-bold text-primary uppercase tracking-widest">제{currentDraw.round}회차</p>
-              <p className="text-sm text-on-surface-variant font-semibold mt-0.5">{currentDraw.date} 추첨</p>
+      <main className="pt-24 pb-48 px-6 max-w-2xl mx-auto space-y-6">
+        
+        {/* 1. TOP Viewer - 현재 선택 영역 */}
+        <section className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/10 shadow-[0_15px_40px_rgba(27,28,25,0.03)] sticky top-20 z-40">
+          <div className="flex justify-between items-end mb-4">
+            <div>
+              <h2 className="text-lg font-headline font-extrabold text-on-surface mb-0.5">선택 중인 번호</h2>
+              <p className="text-xs font-medium text-on-surface-variant">정확히 6개를 골라 1세트를 완성하세요.</p>
             </div>
-            <button
-              onClick={() => setHistoryIdx(i => Math.max(i - 1, 0))}
-              disabled={historyIdx === 0}
-              className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container-lowest disabled:opacity-30 hover:bg-surface-container-high active:scale-90 transition-all"
-            >
-              <span className="material-symbols-outlined text-base text-on-surface">chevron_right</span>
-            </button>
+            <span className="text-xs font-bold bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface">{currentSelection.length} / 6</span>
           </div>
-          {/* Numbers */}
-          <div className="flex gap-2 justify-center flex-wrap">
-            {currentDraw.numbers.map((num) => (
-              <span key={num} className="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-primary border border-outline-variant/20 shadow-sm text-sm">{num}</span>
-            ))}
-            <span className="flex items-center text-on-surface-variant/40 text-xs font-bold mx-1">+</span>
-            <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary border border-primary/20 shadow-sm text-sm">{currentDraw.bonus}</span>
+
+          <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-6">
+            {slots.map((_, i) => {
+              const num = currentSelection[i];
+              return (
+                <div key={i} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-headline font-black text-sm sm:text-lg transition-all duration-300 ${
+                  num 
+                    ? `${getNumberColorClass(num)} shadow-md ring-2 ring-white scale-100` 
+                    : 'bg-surface-container-high border-2 border-dashed border-outline-variant/40 text-transparent scale-95'
+                }`}>
+                  {num ? num.toString().padStart(2, '0') : ''}
+                </div>
+              );
+            })}
           </div>
+
+          <button 
+            onClick={handleAddSet}
+            disabled={currentSelection.length !== 6 || savedSets.length >= 5}
+            className="w-full py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 bg-primary text-white shadow-lg shadow-primary/20 pointer-events-auto"
+          >
+            <span className="material-symbols-outlined text-lg">add_circle</span>
+            {savedSets.length >= 5 ? '최대 5세트 작성 완료' : '이 구성으로 조합 추가'}
+          </button>
         </section>
 
-        {/* Mode Toggle Section */}
-        <section className="flex flex-col items-center gap-6">
-          <div className="bg-surface-container-high p-1.5 rounded-full flex items-center w-full max-w-xs shadow-inner">
-            <Link to="/dashboard/analysis" className="flex-1 py-2.5 rounded-full text-sm font-bold transition-all duration-300 text-on-surface-variant hover:bg-white/50 text-center">AI 자동</Link>
-            <button className="flex-1 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5">스마트 반자동</button>
+        {/* 2. MIDDLE Area - 확정된 세트 리스트 */}
+        <section className="space-y-3">
+          <div className="flex justify-between items-center mb-2 px-2">
+             <h3 className="text-sm font-bold text-on-surface-variant">나의 수동 조합함</h3>
+             <span className="text-[11px] font-black tracking-widest uppercase text-primary bg-primary-container px-2 py-0.5 rounded-full">{savedSets.length} / 5 SETS</span>
           </div>
-          <div className="text-center space-y-1 w-full">
-            <h2 className="text-2xl font-headline font-extrabold text-on-surface">고정수 선택</h2>
-            <p className="text-sm text-on-surface-variant font-medium">분석을 위한 고정수를 최대 5개 선택하세요</p>
-          </div>
+
+          {savedSets.length === 0 ? (
+             <div className="bg-surface-container-low border border-dashed border-outline-variant/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center opacity-70">
+               <span className="material-symbols-outlined text-4xl text-on-surface-variant/50 mb-2">inbox</span>
+               <p className="text-xs font-bold text-on-surface-variant">아직 추가된 조합이 없습니다.</p>
+               <p className="text-[11px] font-medium text-on-surface-variant/60 mt-1">번호 6개를 고른 후 추가 버튼을 눌러주세요.</p>
+             </div>
+          ) : (
+            <div className="space-y-3">
+              {savedSets.map((set, idx) => {
+                const letter = String.fromCharCode(65 + idx); // A, B, C...
+                return (
+                  <div key={idx} className="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/20 shadow-sm flex items-center justify-between group animation-fade-in">
+                    <div className="flex flex-col items-start w-full md:w-auto">
+                      <span className="font-headline font-bold text-primary tracking-widest text-[11px] mb-2 uppercase">수동 세트 {letter}</span>
+                      <div className="flex gap-1 sm:gap-2">
+                        {set.map(n => (
+                          <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-headline font-bold text-[11px] shadow-sm ${getNumberColorClass(n)}`}>
+                            {n.toString().padStart(2, '0')}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <button onClick={() => handleDeleteSet(idx)} className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-red-500 hover:bg-red-50 transition-colors">
+                       <span className="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
-        {/* Number Selection Grid (1-45) */}
-        <section className="bg-surface-container-low rounded-lg p-8">
-          <div className="grid grid-cols-5 sm:grid-cols-7 gap-4">
+        {/* 3. BOTTOM - Number Pad (1~45) */}
+        <section className={`bg-surface-container-low rounded-3xl p-6 transition-opacity duration-300 ${savedSets.length >= 5 ? 'opacity-50 pointer-events-none' : ''}`}>
+          <h3 className="text-sm font-bold text-on-surface mb-4 text-center">번호 선택 패드</h3>
+          <div className="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3">
             {Array.from({ length: 45 }).map((_, i) => {
               const num = i + 1;
-              const isSelected = selectedNumbers.includes(num);
+              const isSelected = currentSelection.includes(num);
               
               if (isSelected) {
                 return (
-                  <button key={num} onClick={() => toggleNumber(num)} className="w-full aspect-square rounded-full flex items-center justify-center text-lg font-extrabold gold-gradient text-white shadow-lg shadow-primary/20 active:scale-90 transition-transform">{num}</button>
+                  <button key={num} onClick={() => toggleNumber(num)} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-primary text-white shadow-md shadow-primary/20 active:scale-95 transition-transform ring-2 ring-primary ring-offset-2 ring-offset-surface-container-low">{num}</button>
                 );
               }
 
               return (
-                <button key={num} onClick={() => toggleNumber(num)} className="w-full aspect-square rounded-full flex items-center justify-center text-lg font-extrabold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high active:scale-90 transition-all">{num}</button>
+                <button key={num} onClick={() => toggleNumber(num)} disabled={currentSelection.length >= 6 && !isSelected} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high active:scale-90 transition-all shadow-sm border border-outline-variant/10 disabled:opacity-30">{num}</button>
               );
             })}
           </div>
         </section>
 
-        {/* Save Checkbox - below number grid */}
-        <label className="flex items-center gap-2 cursor-pointer py-2.5 px-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors select-none w-full">
-          <input
-            type="checkbox"
-            checked={saveNumbers}
-            onChange={e => {
-              setSaveNumbers(e.target.checked);
-              localStorage.setItem('saveNumbersEnabled', e.target.checked ? 'true' : 'false');
-              if (!e.target.checked) localStorage.removeItem('fixedNumbers');
-            }}
-            className="w-4 h-4 accent-amber-600"
-          />
-          <span className="text-sm font-bold text-on-surface-variant">번호 저장</span>
-          <span className="text-xs text-on-surface-variant/60">선택한 번호를 다음에도 유지합니다</span>
-          <span className="material-symbols-outlined text-base text-amber-600 ml-auto" style={{ fontVariationSettings: "'FILL' 1" }}>bookmark</span>
-        </label>
-
-        {/* Insights Bento Grid */}
-        <section className="grid grid-cols-2 gap-4">
-          <div className="col-span-1 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-sm">
-            <p className="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-tighter mb-2">홀짝 비율</p>
-            <div className="flex items-end gap-1">
-              <span className="text-2xl font-headline font-black text-on-surface">3:3</span>
-              <span className="text-xs text-primary font-bold pb-1 mb-1">안정</span>
-            </div>
-          </div>
-          <div className="col-span-1 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-sm">
-            <p className="text-[10px] font-bold text-on-surface-variant opacity-60 uppercase tracking-tighter mb-2">당첨 확률</p>
-            <div className="flex items-end gap-1">
-              <span className="text-2xl font-headline font-black text-on-surface">84%</span>
-              <span className="text-xs text-primary font-bold pb-1 mb-1">높음</span>
-            </div>
-          </div>
-        </section>
       </main>
 
-      {/* Floating Action Button */}
-      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-xs px-6">
-        <button onClick={handleGenerate} className="w-full gold-gradient text-white py-4 rounded-full font-headline font-extrabold text-lg shadow-xl shadow-primary/30 flex items-center justify-center gap-2 active:scale-95 transition-transform">
-          <span className="material-symbols-outlined" data-icon="auto_awesome" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
-          5개 조합 생성하기
-        </button>
-      </div>
-
-      <BottomNav />
-
-      {/* Background Decorative Elements */}
-      <div className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden opacity-30">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary-container/20 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-tertiary-container/20 blur-[100px] rounded-full"></div>
-      </div>
-
-      {isGenerating && (
-        <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center">
-          <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-4"></div>
-          <h2 className="text-xl font-headline font-bold text-on-surface">AI가 번호를 조합 중입니다...</h2>
-          <p className="text-sm text-on-surface-variant mt-2">최적의 패턴을 분석하고 있습니다</p>
+      {/* Floating Final Save Button */}
+      {savedSets.length > 0 && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm px-6 animation-fade-in">
+          <button onClick={handleFinalSave} className="w-full gold-gradient text-white py-4 rounded-full font-headline font-extrabold text-[15px] shadow-2xl shadow-amber-500/30 flex items-center justify-center gap-2 active:scale-95 transition-transform border border-amber-300/50">
+            <span className="material-symbols-outlined" data-icon="save">save</span>
+            {savedSets.length}개의 세트 저장하기
+          </button>
         </div>
       )}
+
+      <BottomNav />
     </div>
   );
 }

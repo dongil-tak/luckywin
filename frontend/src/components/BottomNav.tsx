@@ -95,7 +95,7 @@ export default function BottomNav() {
           className={`flex flex-col items-center justify-center active:scale-90 duration-200 ${isDashboard ? activeClass : inactiveClass}`}
         >
           <span className="material-symbols-outlined" style={isDashboard ? { fontVariationSettings: "'FILL' 1" } : {}}>dashboard</span>
-          <span className="font-headline text-[10px] font-semibold uppercase tracking-wide mt-1">스마트번호생성</span>
+          <span className="font-headline text-[10px] font-semibold uppercase tracking-wide mt-1">번호 직접선택</span>
         </Link>
 
         <Link
