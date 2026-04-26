@@ -70,7 +70,7 @@ export default function Dashboard() {
     existing.unshift(entry);
     localStorage.setItem('savedNumbers', JSON.stringify(existing));
     
-    navigate('/fortune'); // 저장 후 금주의 당첨현황(행운 관리) 탭으로 이동
+    navigate('/saved'); // 저장 후 저장된 번호 페이지로 이동
   };
 
   const slots = Array.from({ length: 6 });
@@ -173,7 +173,7 @@ export default function Dashboard() {
                 <div className="pt-4 pb-2 animation-fade-in">
                   <button onClick={handleFinalSave} className="w-full bg-surface-container-highest text-on-surface hover:bg-surface-variant py-4 rounded-xl font-headline font-extrabold text-[14px] flex items-center justify-center gap-2 active:scale-95 transition-all">
                     <span className="material-symbols-outlined text-xl text-primary" data-icon="bookmark">bookmark</span>
-                    저장 번호 보러가기
+                    번호 저장하기
                   </button>
                 </div>
               )}
