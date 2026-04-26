@@ -34,6 +34,25 @@ export default function Dashboard() {
     }
   };
 
+  const handleSemiAuto = () => {
+    if (savedSets.length >= 5) return;
+    if (currentSelection.length >= 6) return;
+
+    const available = Array.from({ length: 45 }).map((_, i) => i + 1).filter(n => !currentSelection.includes(n));
+    const toPick = 6 - currentSelection.length;
+    
+    const picked = [];
+    for (let i = 0; i < toPick; i++) {
+        const randIndex = Math.floor(Math.random() * available.length);
+        picked.push(available[randIndex]);
+        available.splice(randIndex, 1);
+    }
+
+    const finalSet = [...currentSelection, ...picked].sort((a, b) => a - b);
+    setSavedSets([...savedSets, finalSet]);
+    setCurrentSelection([]);
+  };
+
   const handleDeleteSet = (index: number) => {
     setSavedSets(savedSets.filter((_, i) => i !== index));
   };
@@ -93,14 +112,24 @@ export default function Dashboard() {
             })}
           </div>
 
-          <button 
-            onClick={handleAddSet}
-            disabled={currentSelection.length !== 6 || savedSets.length >= 5}
-            className="w-full py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 bg-primary text-white shadow-lg shadow-primary/20 pointer-events-auto"
-          >
-            <span className="material-symbols-outlined text-lg">add_circle</span>
-            {savedSets.length >= 5 ? '최대 5세트 작성 완료' : '이 구성으로 조합 추가'}
-          </button>
+          <div className="flex gap-2">
+            <button 
+              onClick={handleAddSet}
+              disabled={currentSelection.length !== 6 || savedSets.length >= 5}
+              className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 bg-primary text-white shadow-lg shadow-primary/20 pointer-events-auto"
+            >
+              <span className="material-symbols-outlined text-lg">add_circle</span>
+              {savedSets.length >= 5 ? '최대 세트 완료' : '세트 저장'}
+            </button>
+            <button 
+              onClick={handleSemiAuto}
+              disabled={currentSelection.length === 6 || savedSets.length >= 5}
+              className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 gold-gradient text-white shadow-lg shadow-amber-500/20 pointer-events-auto"
+            >
+              <span className="material-symbols-outlined text-lg">psychology</span>
+              AI 반자동 생성
+            </button>
+          </div>
         </section>
 
         {/* 2. MIDDLE Area - 확정된 세트 리스트 */}
@@ -138,6 +167,16 @@ export default function Dashboard() {
                   </div>
                 );
               })}
+              
+              {/* List Inner Save Button */}
+              {savedSets.length > 0 && (
+                <div className="pt-4 pb-2 animation-fade-in">
+                  <button onClick={handleFinalSave} className="w-full bg-surface-container-highest text-on-surface hover:bg-surface-variant py-4 rounded-xl font-headline font-extrabold text-[14px] flex items-center justify-center gap-2 active:scale-95 transition-all">
+                    <span className="material-symbols-outlined text-xl text-primary" data-icon="bookmark">bookmark</span>
+                    저장 번호 보러가기
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </section>
@@ -164,16 +203,6 @@ export default function Dashboard() {
         </section>
 
       </main>
-
-      {/* Floating Final Save Button */}
-      {savedSets.length > 0 && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm px-6 animation-fade-in">
-          <button onClick={handleFinalSave} className="w-full gold-gradient text-white py-4 rounded-full font-headline font-extrabold text-[15px] shadow-2xl shadow-amber-500/30 flex items-center justify-center gap-2 active:scale-95 transition-transform border border-amber-300/50">
-            <span className="material-symbols-outlined" data-icon="save">save</span>
-            {savedSets.length}개의 세트 저장하기
-          </button>
-        </div>
-      )}
 
       <BottomNav />
     </div>
