@@ -86,11 +86,10 @@ export default function BottomNav() {
 
         <Link
           to="/dashboard/results"
-          state={{ selectedNumbers: [] }}
           className={`flex flex-col items-center justify-center active:scale-90 duration-200 ${isResults ? activeClass : inactiveClass}`}
         >
           <span className="material-symbols-outlined mb-1" style={isResults ? { fontVariationSettings: "'FILL' 1" } : {}}>history</span>
-          <span className="font-headline text-[10px] font-semibold uppercase tracking-wide">당첨번호 보기</span>
+          <span className="font-headline text-[10px] font-semibold uppercase tracking-wide">AI 분석번호</span>
         </Link>
 
         <Link

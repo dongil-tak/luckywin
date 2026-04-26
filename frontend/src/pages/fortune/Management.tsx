@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 
 export default function Management() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const extraSets = [
+    [2, 14, 15, 22, 27, 33],
+    [5, 11, 19, 21, 35, 42],
+    [7, 10, 12, 19, 23, 34],
+    [8, 16, 24, 29, 39, 45],
+  ];
+
   return (
     <div className="bg-background text-on-background min-h-screen pb-32">
       {/* Top Navigation Shell */}
@@ -35,7 +45,7 @@ export default function Management() {
         {/* History List */}
         <div className="space-y-6 mt-6">
           {/* History Card: Winner */}
-          <Link to="/fortune/details" className="block">
+          <div className="block">
             <div className="bg-surface-container-lowest rounded-lg p-6 shadow-[0_10px_30px_rgba(27,28,25,0.02)] border border-outline-variant/10 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 blur-3xl -mr-16 -mt-16 rounded-full"></div>
               <div className="flex justify-between items-start mb-6">
@@ -62,16 +72,34 @@ export default function Management() {
                   </div>
                   <span className="text-[10px] font-bold text-primary-container">4등 당첨</span>
                 </div>
+                
+                {isExpanded && (
+                  <div className="pt-2 pb-2 space-y-3">
+                    {extraSets.map((set, idx) => (
+                      <div key={idx} className="flex items-center justify-between opacity-70 scale-95 origin-left">
+                        <div className="flex gap-1.5">
+                          {set.map(n => (
+                            <div key={n} className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold bg-surface-container-high text-on-surface shadow-sm ring-1 ring-black/5">{n}</div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <div className="h-px bg-surface-container-high w-full opacity-50"></div>
                 <div className="flex items-center justify-center py-1">
-                  <span className="text-[11px] font-bold text-on-surface-variant flex items-center gap-1 hover:text-primary transition-all">
-                      외 4개 세트 더보기
-                      <span className="material-symbols-outlined text-sm">keyboard_arrow_down</span>
-                  </span>
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-[11px] font-bold text-on-surface-variant flex items-center gap-1 hover:text-primary transition-all p-2 -my-2"
+                  >
+                      {isExpanded ? '접기' : '외 4개 세트 더보기'}
+                      <span className="material-symbols-outlined text-sm">{isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}</span>
+                  </button>
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
 
           {/* Ad Space Placeholder */}
           <div className="bg-surface-container-low rounded-lg h-24 flex items-center justify-center border-2 border-dashed border-outline-variant/30 overflow-hidden relative group">
