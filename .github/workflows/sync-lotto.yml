@@ -1,0 +1,46 @@
+name: Auto Sync Lotto Database
+
+on:
+  schedule:
+    # Runs every Saturday at 22:10 KST (13:10 UTC)
+    - cron: '10 13 * * 6'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-cache: npm
+          node-version: 20
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Sync Lotto Database
+        run: |
+          cd frontend
+          npm run sync-lotto
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Check if there are changes in the database file
+          if git diff --quiet frontend/src/data/lottoDB.json; then
+            echo "No database changes detected."
+          else
+            echo "Database updated. Committing and pushing changes..."
+            git add frontend/src/data/lottoDB.json
+            git commit -m "chore: auto-sync lotto database to latest round [skip ci]"
+            git push
+          fi
