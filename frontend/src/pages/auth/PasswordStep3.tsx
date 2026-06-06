@@ -14,7 +14,7 @@ export default function PasswordStep3() {
             </button>
           </div>
           <div className="flex-1 flex justify-center">
-            <div className="text-xl font-black text-[#735c00] tracking-tighter font-headline">Win-Way</div>
+            <div className="text-xl font-black text-[#735c00] tracking-tighter font-headline">LUCKY WIN</div>
           </div>
           <div className="flex-1 flex justify-end">
             <span className="text-[13px] font-bold text-on-surface-variant font-label whitespace-nowrap">제1150회차</span>

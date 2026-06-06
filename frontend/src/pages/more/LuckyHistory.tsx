@@ -1,52 +1,37 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import BottomNav from '../../components/BottomNav';
 import lottoDB from '../../data/lottoDB.json';
 
 interface Winner {
   round: number;
   date: string;
-  serviceWinner: boolean;
   numbers: number[];
   bonus: number;
   prizes: {
-    rank1: { amount: string; count: number; serviceCount?: number };
-    rank2: { amount: string; count: number };
-    rank3: { amount: string; count: number };
+    rank1: { amount: string; count: number };
   };
 }
 
-// Map first 10 items from DB as recent history
-const winners: Winner[] = lottoDB.slice(0, 10).map((item, index) => ({
+const winners: Winner[] = lottoDB.map((item) => ({
   round: item.round,
   date: `${item.drawDate.substring(0, 4)}년 ${item.drawDate.substring(5, 7)}월 ${item.drawDate.substring(8, 10)}일`,
-  serviceWinner: index % 3 === 0, // Mock boolean for UI representation
   numbers: item.numbers,
   bonus: item.bonus,
   prizes: {
-    rank1: { amount: item.prizeAmount.toLocaleString('ko-KR'), count: item.winners, serviceCount: index % 3 === 0 ? 1 : undefined },
-    rank2: { amount: '56,284,110', count: 63 }, // Dummy rank2 prize for now since it's not in DB
-    rank3: { amount: '1,500,000', count: 3241 }, // Dummy rank3 prize
+    rank1: { amount: item.prizeAmount.toLocaleString('ko-KR'), count: item.winners },
   },
 }));
 
-const hotNumbers = [
-  { num: '07', pct: 40 }, { num: '12', pct: 65 }, { num: '23', pct: 90 },
-  { num: '29', pct: 55 }, { num: '33', pct: 75 }, { num: '41', pct: 85 },
-];
-
-function NumberBall({ n, highlight }: { n: number; highlight?: boolean }) {
+function NumberBall({ n }: { n: number }) {
   return (
-    <div className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full font-headline font-bold text-sm shadow-sm
-      ${highlight
-        ? 'bg-primary-container text-on-primary-container ring-1 ring-primary/20'
-        : 'bg-surface-container-high text-on-surface'}`}>
+    <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full font-headline font-bold text-sm shadow-sm bg-surface-container-high text-on-surface">
       {n}
     </div>
   );
 }
 
-function PrizeRow({ rank, label, amount, count, badge }: {
-  rank: string; label: string; amount: string; count: number; badge?: string;
+function PrizeRow({ rank, label, amount, count }: {
+  rank: string; label: string; amount: string; count: number;
 }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-outline-variant/15 last:border-0">
@@ -63,22 +48,129 @@ function PrizeRow({ rank, label, amount, count, badge }: {
       <div className="text-right">
         <p className="text-xs text-on-surface-variant">당첨인원</p>
         <p className="font-bold text-sm text-on-surface">{count.toLocaleString()}명</p>
-        {badge && <p className="text-[10px] text-primary font-bold mt-0.5">{badge}</p>}
       </div>
     </div>
   );
 }
 
+interface AppWinningHistoryItem {
+  round: number;
+  drawDate: string;
+  combination: number[];
+  type: 'ai' | 'semi-auto' | 'manual';
+  matchCount: number;
+  bonusMatched: boolean;
+  rank: string;
+}
+
 export default function LuckyHistory() {
   const [selectedRound, setSelectedRound] = useState<Winner | null>(null);
+  const [visibleCount, setVisibleCount] = useState(20);
+  const [activeTab, setActiveTab] = useState<'official' | 'app'>('official');
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 20);
+  };
+
+  /** savedAt 기준 해당 주의 다음 토요일(추첨일) 반환 */
+  const getNextSaturday = (savedAt: string): Date => {
+    const d = new Date(savedAt);
+    const day = d.getDay();
+    const daysUntilSaturday = day === 6 ? 7 : 6 - day;
+    d.setDate(d.getDate() + daysUntilSaturday);
+    d.setHours(23, 0, 0, 0);
+    return d;
+  };
+
+  // 우리 앱 배출/당첨 데이터 계산
+  const appWinningHistory = useMemo((): AppWinningHistoryItem[] => {
+    try {
+      const allEntries = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
+      const results: AppWinningHistoryItem[] = [];
+
+      allEntries.forEach((entry: any) => {
+        const sat = getNextSaturday(entry.savedAt);
+        const draw = lottoDB.find((row) => {
+          const drawDate = new Date(row.drawDate);
+          return (
+            drawDate.getFullYear() === sat.getFullYear() &&
+            drawDate.getMonth() === sat.getMonth() &&
+            drawDate.getDate() === sat.getDate()
+          );
+        });
+
+        if (draw) {
+          entry.combinations.forEach((comb: number[], cIdx: number) => {
+            const main = comb.filter(n => draw.numbers.includes(n)).length;
+            const hasBonus = comb.includes(draw.bonus);
+            if (main >= 3) { // 5등 이상
+              let rank = '5등';
+              if (main === 6) rank = '1등';
+              else if (main === 5 && hasBonus) rank = '2등';
+              else if (main === 5) rank = '3등';
+              else if (main === 4) rank = '4등';
+
+              const type = entry.type || (entry.aiFlags?.[cIdx] ? 'ai' : 'manual');
+
+              results.push({
+                round: draw.round,
+                drawDate: draw.drawDate,
+                combination: comb,
+                type: type,
+                matchCount: main,
+                bonusMatched: hasBonus,
+                rank
+              });
+            }
+          });
+        }
+      });
+
+      return results.sort((a, b) => b.round - a.round);
+    } catch (e) {
+      return [];
+    }
+  }, []);
+
+  // 총 생성 조합 및 당첨 통계
+  const stats = useMemo(() => {
+    try {
+      const allEntries = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
+      let totalGenerated = 0;
+      allEntries.forEach((entry: any) => {
+        totalGenerated += (entry.combinations || []).length;
+      });
+
+      const wins = {
+        '1등': 0,
+        '2등': 0,
+        '3등': 0,
+        '4등': 0,
+        '5등': 0,
+      };
+
+      appWinningHistory.forEach(item => {
+        if (item.rank in wins) {
+          wins[item.rank as keyof typeof wins]++;
+        }
+      });
+
+      const totalWins = appWinningHistory.length;
+      const winRate = totalGenerated > 0 ? ((totalWins / totalGenerated) * 100).toFixed(1) : '0.0';
+
+      return { totalGenerated, totalWins, wins, winRate };
+    } catch (e) {
+      return { totalGenerated: 0, totalWins: 0, wins: { '1등': 0, '2등': 0, '3등': 0, '4등': 0, '5등': 0 }, winRate: '0.0' };
+    }
+  }, [appWinningHistory]);
 
   return (
     <div className="bg-surface text-on-surface font-label min-h-screen pb-32">
       {/* TopAppBar */}
       <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm shadow-stone-200/50">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-amber-600">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 tracking-tighter">윈웨이(Win-Way)</h1>
+          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
         </div>
         <span className="font-headline font-bold text-lg text-amber-600">제{lottoDB[0].round + 1}회차</span>
       </header>
@@ -101,9 +193,6 @@ export default function LuckyHistory() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">{selectedRound.date} 추첨</p>
                 <h3 className="text-2xl font-headline font-extrabold text-on-surface">제{selectedRound.round}회차</h3>
-                {selectedRound.serviceWinner && (
-                  <span className="inline-block mt-1 px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full">🏆 서비스 예측 적중</span>
-                )}
               </div>
               <button onClick={() => setSelectedRound(null)} className="p-2 rounded-full hover:bg-surface-container-high transition-colors">
                 <span className="material-symbols-outlined text-on-surface-variant">close</span>
@@ -113,7 +202,7 @@ export default function LuckyHistory() {
             {/* Winning Numbers */}
             <div className="flex flex-wrap gap-2 mb-6">
               {selectedRound.numbers.map(n => (
-                <NumberBall key={n} n={n} highlight={selectedRound.serviceWinner} />
+                <NumberBall key={n} n={n} />
               ))}
               <div className="flex items-center px-1 text-on-surface-variant/60">
                 <span className="material-symbols-outlined text-lg">add</span>
@@ -131,137 +220,150 @@ export default function LuckyHistory() {
                 amount={selectedRound.prizes.rank1.amount}
                 count={selectedRound.prizes.rank1.count}
               />
-              <PrizeRow
-                rank="2"
-                label="2등 당첨금 (1인)"
-                amount={selectedRound.prizes.rank2.amount}
-                count={selectedRound.prizes.rank2.count}
-              />
-              <PrizeRow
-                rank="3"
-                label="3등 당첨금 (1인)"
-                amount={selectedRound.prizes.rank3.amount}
-                count={selectedRound.prizes.rank3.count}
-              />
             </div>
-
-            {/* Service Winners - only for serviceWinner rounds */}
-            {selectedRound.serviceWinner && selectedRound.prizes.rank1.serviceCount !== undefined && (
-              <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-white text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-amber-700 uppercase tracking-widest">윈웨이 서비스 배출</p>
-                  <p className="font-headline font-extrabold text-amber-900 text-xl">{selectedRound.prizes.rank1.serviceCount}명</p>
-                  <p className="text-xs text-amber-600">이번 회차 1등 중 우리 서비스 이용자</p>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
 
-      <main className="pt-24 pb-48 px-6 max-w-3xl mx-auto space-y-10">
-        {/* Hero Banner */}
-        <section className="relative w-full h-44 rounded-lg overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-900 via-amber-700 to-yellow-500" />
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_white_0%,_transparent_60%)]" />
-          <div className="absolute inset-0 flex flex-col justify-center px-8">
-            <span className="text-yellow-200 font-headline font-extrabold tracking-widest text-xs mb-2 uppercase">윈웨이 명예의 전당</span>
-            <h2 className="text-white text-2xl font-bold leading-tight">서비스가 예측한<br />1등 당첨 번호 공개</h2>
-          </div>
-        </section>
-
-        {/* Stats Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-8 bg-surface-container-lowest rounded-lg p-6 shadow-sm">
-            <div className="flex justify-between items-end mb-6">
-              <div>
-                <h3 className="font-headline font-bold text-xl">최근 핫 넘버 통계</h3>
-                <p className="text-on-surface-variant text-sm">최근 100회차 분석 데이터 기반</p>
-              </div>
-              <span className="material-symbols-outlined text-primary">monitoring</span>
-            </div>
-            <div className="flex items-end justify-between h-36 gap-2">
-              {hotNumbers.map(({ num, pct }) => (
-                <div key={num} className="flex flex-col items-center gap-2 flex-1">
-                  <div className="w-full rounded-t-sm" style={{ height: `${pct}%`, background: pct >= 85 ? 'var(--color-primary, #735c00)' : `rgba(115,92,0,${pct / 120})` }} />
-                  <span className={`text-[10px] font-bold ${pct >= 85 ? 'text-primary' : ''}`}>{num}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="md:col-span-4 bg-primary-container/10 border border-primary-container/20 rounded-lg p-6 flex flex-col justify-between">
-            <div>
-              <h3 className="font-headline font-bold text-xl mb-1">정밀 통계 분석</h3>
-              <p className="text-on-surface-variant text-sm">홀짝 비율</p>
-            </div>
-            <div className="py-4 flex justify-center">
-              <div className="relative w-28 h-28 rounded-full border-8 border-surface-container-high flex items-center justify-center">
-                <div className="absolute inset-[-8px] rounded-full border-8 border-primary border-r-transparent border-b-transparent rotate-45" />
-                <span className="font-headline font-extrabold text-2xl">4:2</span>
-              </div>
-            </div>
-            <div className="flex justify-between text-xs font-bold text-on-surface-variant">
-              <span>홀 67%</span><span>짝 33%</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Winner List Header */}
-        <div className="flex items-center justify-between border-b border-outline-variant/30 pb-4">
-          <h2 className="text-2xl font-bold font-headline tracking-tight">명예의 전당</h2>
-          <div className="flex gap-2">
-            <button className="p-2 hover:bg-surface-container-high rounded-full transition-colors">
-              <span className="material-symbols-outlined text-on-surface-variant">filter_list</span>
-            </button>
-            <button className="p-2 hover:bg-surface-container-high rounded-full transition-colors">
-              <span className="material-symbols-outlined text-on-surface-variant">sort</span>
-            </button>
-          </div>
+      <main className="pt-24 pb-48 px-6 max-w-3xl mx-auto space-y-6">
+        {/* Title Section */}
+        <div className="border-b border-outline-variant/30 pb-4">
+          <h2 className="text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">명예의 전당</h2>
+          <p className="text-sm font-medium text-on-surface-variant">당첨 번호 조회 및 우리 앱 예측 매핑 통계입니다.</p>
         </div>
 
-        {/* Winner Cards */}
-        <div className="space-y-6">
-          {winners.map((w) => (
-            <article key={w.round} className={`p-6 md:p-8 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-surface-container transition-colors
-              ${w.serviceWinner ? 'bg-surface-container-low' : 'bg-surface-container-lowest'}`}>
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <span className="font-headline font-extrabold text-2xl tracking-tighter">제{w.round}회차</span>
-                  {w.serviceWinner && (
-                    <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase tracking-widest shadow-sm">🏆 서비스 예측 적중</span>
-                  )}
-                </div>
-                <p className="text-on-surface-variant text-sm">{w.date} 추첨</p>
-              </div>
-              <div className="flex flex-wrap gap-2 md:gap-3 items-center">
-                {w.numbers.map(n => <NumberBall key={n} n={n} highlight={w.serviceWinner} />)}
-                <div className="flex items-center px-1 text-on-surface-variant">
-                  <span className="material-symbols-outlined text-lg">add</span>
-                </div>
-                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-surface-container-highest border-2 border-primary-container text-primary font-headline font-extrabold text-sm">
-                  {w.bonus}
-                </div>
-                <button
-                  onClick={() => setSelectedRound(w)}
-                  className="ml-3 bg-surface-container-highest w-10 h-10 rounded-xl flex items-center justify-center hover:bg-surface-container-high active:scale-90 transition-all shrink-0"
-                >
-                  <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Load More */}
-        <div className="flex justify-center py-6">
-          <button className="bg-surface-container-highest text-on-surface font-bold px-10 py-4 rounded-full flex items-center gap-3 hover:bg-surface-variant transition-colors group">
-            이전 기록 더보기
-            <span className="material-symbols-outlined group-hover:translate-y-1 transition-transform">expand_more</span>
+        {/* Tab Selector */}
+        <div className="flex p-1.5 bg-surface-container-low rounded-2xl mb-6">
+          <button
+            onClick={() => setActiveTab('official')}
+            className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${activeTab === 'official' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}`}
+          >
+            역대 당첨번호
+          </button>
+          <button
+            onClick={() => setActiveTab('app')}
+            className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${activeTab === 'app' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}`}
+          >
+            우리 앱 배출 성과
           </button>
         </div>
+
+        {activeTab === 'official' ? (
+          <>
+            {/* Winner Cards */}
+            <div className="space-y-4">
+              {winners.slice(0, visibleCount).map((w) => (
+                <article key={w.round} className="p-5 md:p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low transition-colors bg-surface-container-lowest border border-outline-variant/10 shadow-sm">
+                  <div className="space-y-1">
+                    <span className="font-headline font-extrabold text-xl tracking-tighter text-on-surface">제{w.round}회차</span>
+                    <p className="text-on-surface-variant text-xs">{w.date} 추첨</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {w.numbers.map(n => <NumberBall key={n} n={n} />)}
+                    <div className="flex items-center px-1 text-on-surface-variant">
+                      <span className="material-symbols-outlined text-lg">add</span>
+                    </div>
+                    <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-surface-container-highest border-2 border-primary-container text-primary font-headline font-extrabold text-sm">
+                      {w.bonus}
+                    </div>
+                    <button
+                      onClick={() => setSelectedRound(w)}
+                      className="ml-3 bg-surface-container-highest w-10 h-10 rounded-xl flex items-center justify-center hover:bg-surface-container-high active:scale-90 transition-all shrink-0"
+                    >
+                      <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* Load More */}
+            {visibleCount < winners.length && (
+              <div className="flex justify-center py-6">
+                <button onClick={handleLoadMore} className="bg-surface-container-highest text-on-surface font-bold px-10 py-4 rounded-full flex items-center gap-3 hover:bg-surface-variant transition-colors group">
+                  이전 회차 더보기
+                  <span className="material-symbols-outlined group-hover:translate-y-1 transition-transform">expand_more</span>
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-8 animate-fadeIn">
+            {/* Stat Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">총 추천 번호 수</p>
+                <p className="font-headline font-black text-2xl text-on-surface">{stats.totalGenerated}개</p>
+              </div>
+              <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">총 당첨 조합 수</p>
+                <p className="font-headline font-black text-2xl text-primary">{stats.totalWins}개</p>
+              </div>
+              <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">종합 적중률</p>
+                <p className="font-headline font-black text-2xl text-amber-600">{stats.winRate}%</p>
+              </div>
+              <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">5등 이상 당첨</p>
+                <p className="font-headline font-black text-2xl text-emerald-600">{stats.totalWins}건</p>
+              </div>
+            </div>
+
+            {/* Rank Distribution breakdown */}
+            <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/10 shadow-sm">
+              <h3 className="text-sm font-bold text-on-surface mb-4">등수별 상세 매핑 내역</h3>
+              <div className="grid grid-cols-5 gap-2 text-center">
+                {Object.entries(stats.wins).map(([rank, count]) => (
+                  <div key={rank} className="bg-surface-container-low/60 rounded-xl p-3">
+                    <p className="text-xs font-black text-on-surface">{rank}</p>
+                    <p className="text-base font-extrabold text-primary mt-1">{count}건</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Winning Combinations Generated List */}
+            <div className="space-y-4">
+              <h3 className="text-base font-bold text-on-surface">앱 배출 당첨 조합 목록</h3>
+              
+              {appWinningHistory.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center text-on-surface-variant">
+                  <span className="material-symbols-outlined text-5xl opacity-30 mb-3">military_tech</span>
+                  <p className="text-sm font-medium">배출된 당첨 조합이 없습니다.</p>
+                  <p className="text-xs opacity-75 mt-1">번호를 생성하고 저장한 뒤, 추첨 시간이 지나면 당첨 결과가 여기에 자동 매핑됩니다.</p>
+                </div>
+              ) : (
+                appWinningHistory.map((item, idx) => (
+                  <article key={idx} className="p-5 rounded-3xl bg-surface-container-lowest border border-outline-variant/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-headline font-black text-lg text-on-surface">제{item.round}회차</span>
+                        <span className={`px-2 py-0.5 text-[9px] font-black rounded-full text-white bg-amber-500`}>
+                          {item.rank}
+                        </span>
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                          {item.type === 'ai' ? 'AI 추천' : item.type === 'semi-auto' ? '반자동' : '직접선택'}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-on-surface-variant">추첨일: {item.drawDate}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 items-center">
+                      {item.combination.map((n, i) => (
+                        <div
+                          key={i}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shadow-sm bg-surface-container-high text-on-surface`}
+                        >
+                          {n}
+                        </div>
+                      ))}
+                      <span className="text-xs font-extrabold text-primary ml-2">({item.matchCount}개 일치)</span>
+                    </div>
+                  </article>
+                ))
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       <BottomNav />

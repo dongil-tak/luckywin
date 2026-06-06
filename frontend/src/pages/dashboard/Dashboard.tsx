@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import EmailInputDialog from '../../components/EmailInputDialog';
+import AdSenseBanner from '../../components/AdSenseBanner';
 
 const getNumberColorClass = (n: number) => {
   if (n <= 10) return 'bg-[#facc15] text-[#713f12]';
@@ -10,10 +12,28 @@ const getNumberColorClass = (n: number) => {
   return 'bg-[#10b981] text-white';
 };
 
+const DRAFT_KEY = 'dashboard_draft_sets';
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [currentSelection, setCurrentSelection] = useState<number[]>([]);
-  const [savedSets, setSavedSets] = useState<number[][]>([]);
+  const [savedSets, setSavedSets] = useState<{ numbers: number[]; isAi: boolean }[]>(() => {
+    try {
+      const draft = localStorage.getItem(DRAFT_KEY);
+      return draft ? JSON.parse(draft) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (savedSets.length > 0) {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(savedSets));
+    } else {
+      localStorage.removeItem(DRAFT_KEY);
+    }
+  }, [savedSets]);
 
   const toggleNumber = (num: number) => {
     if (savedSets.length >= 5) return; // 5세트 꽉 참
@@ -29,7 +49,7 @@ export default function Dashboard() {
 
   const handleAddSet = () => {
     if (currentSelection.length === 6 && savedSets.length < 5) {
-      setSavedSets([...savedSets, currentSelection]);
+      setSavedSets([...savedSets, { numbers: currentSelection, isAi: false }]);
       setCurrentSelection([]);
     }
   };
@@ -38,6 +58,7 @@ export default function Dashboard() {
     if (savedSets.length >= 5) return;
     if (currentSelection.length >= 6) return;
 
+    // AI가 최적의 번호를 조합하여 제공한다는 컨셉에 맞춰 AI 알고리즘 메시지를 보여주거나 처리
     const available = Array.from({ length: 45 }).map((_, i) => i + 1).filter(n => !currentSelection.includes(n));
     const toPick = 6 - currentSelection.length;
     
@@ -49,7 +70,7 @@ export default function Dashboard() {
     }
 
     const finalSet = [...currentSelection, ...picked].sort((a, b) => a - b);
-    setSavedSets([...savedSets, finalSet]);
+    setSavedSets([...savedSets, { numbers: finalSet, isAi: true }]);
     setCurrentSelection([]);
   };
 
@@ -60,17 +81,29 @@ export default function Dashboard() {
   const handleFinalSave = () => {
     if (savedSets.length === 0) return;
     
-    // Save to our management localStorage
+    const email = localStorage.getItem('verified_email');
+    if (email) {
+      handleSaveConfirm(email);
+    } else {
+      setIsEmailModalOpen(true);
+    }
+  };
+
+  const handleSaveConfirm = (email: string) => {
+    // 하나라도 AI 반자동이 있으면 type을 'semi-auto'로 설정하고, 개별 정보도 같이 저장되도록 보강
+    const hasAiSet = savedSets.some(s => s.isAi);
     const entry = {
+      email,
       savedAt: new Date().toISOString(),
-      combinations: savedSets,
-      type: 'manual'
+      combinations: savedSets.map(s => s.numbers),
+      aiFlags: savedSets.map(s => s.isAi), // 개별 AI 생성 여부 플래그
+      type: hasAiSet ? 'semi-auto' : 'manual'
     };
     const existing = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
     existing.unshift(entry);
     localStorage.setItem('savedNumbers', JSON.stringify(existing));
-    
-    navigate('/saved'); // 저장 후 저장된 번호 페이지로 이동
+    localStorage.removeItem(DRAFT_KEY);
+    navigate('/saved');
   };
 
   const slots = Array.from({ length: 6 });
@@ -85,11 +118,12 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="pt-24 pb-48 px-6 max-w-2xl mx-auto space-y-6">
+      <main className="pt-16 pb-48 max-w-2xl mx-auto space-y-6">
         
-        {/* 1. TOP Viewer - 현재 선택 영역 */}
-        <section className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/10 shadow-[0_15px_40px_rgba(27,28,25,0.03)] sticky top-20 z-40">
-          <div className="flex justify-between items-end mb-4">
+        {/* 1. TOP Viewer - 현재 선택 영역 (상단 스크롤 밀착 고정) */}
+        <section className="sticky top-16 z-40 bg-surface-container-lowest p-6 border-b border-outline-variant/15 shadow-md w-full">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex justify-between items-end mb-4">
             <div>
               <h2 className="text-lg font-headline font-extrabold text-on-surface mb-0.5">선택 중인 번호</h2>
               <p className="text-xs font-medium text-on-surface-variant">정확히 6개를 골라 1세트를 완성하세요.</p>
@@ -129,10 +163,13 @@ export default function Dashboard() {
               <span className="material-symbols-outlined text-lg">psychology</span>
               AI 반자동 생성
             </button>
+            </div>
           </div>
         </section>
 
-        {/* 2. MIDDLE Area - 확정된 세트 리스트 */}
+        {/* 나머지 콘텐츠를 위한 좌우 여백 패딩 컨테이너 */}
+        <div className="px-6 space-y-6">
+          {/* 2. MIDDLE Area - 확정된 세트 리스트 */}
         <section className="space-y-3">
           <div className="flex justify-between items-center mb-2 px-2">
              <h3 className="text-sm font-bold text-on-surface-variant">나의 수동 조합함</h3>
@@ -152,9 +189,19 @@ export default function Dashboard() {
                 return (
                   <div key={idx} className="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/20 shadow-sm flex items-center justify-between group animation-fade-in">
                     <div className="flex flex-col items-start w-full md:w-auto">
-                      <span className="font-headline font-bold text-primary tracking-widest text-[11px] mb-2 uppercase">수동 세트 {letter}</span>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-headline font-bold text-primary tracking-widest text-[11px] uppercase">
+                          {set.isAi ? `반자동 세트 ${letter}` : `수동 세트 ${letter}`}
+                        </span>
+                        {set.isAi && (
+                          <span className="bg-amber-100 text-amber-800 text-[8px] font-black px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                            <span className="material-symbols-outlined text-[9px]">psychology</span>
+                            AI 반자동
+                          </span>
+                        )}
+                      </div>
                       <div className="flex gap-1 sm:gap-2">
-                        {set.map(n => (
+                        {set.numbers.map(n => (
                           <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-headline font-bold text-[11px] shadow-sm ${getNumberColorClass(n)}`}>
                             {n.toString().padStart(2, '0')}
                           </div>
@@ -181,6 +228,11 @@ export default function Dashboard() {
           )}
         </section>
 
+        {/* Google Adsense Banner above Number Pad */}
+        <div className="w-full border border-outline-variant/10 rounded-2xl overflow-hidden bg-surface-container-low/30 my-4">
+          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
+        </div>
+
         {/* 3. BOTTOM - Number Pad (1~45) */}
         <section className={`bg-surface-container-low rounded-3xl p-6 transition-opacity duration-300 ${savedSets.length >= 5 ? 'opacity-50 pointer-events-none' : ''}`}>
           <h3 className="text-sm font-bold text-on-surface mb-4 text-center">번호 선택 패드</h3>
@@ -201,10 +253,16 @@ export default function Dashboard() {
             })}
           </div>
         </section>
-
+        </div>
       </main>
 
       <BottomNav />
+
+      <EmailInputDialog
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        onConfirm={handleSaveConfirm}
+      />
     </div>
   );
 }

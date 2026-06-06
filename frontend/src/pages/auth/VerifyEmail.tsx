@@ -10,7 +10,7 @@ export default function VerifyEmail() {
           <div className="flex flex-col items-center mx-auto space-y-2">
             <div className="flex items-center space-x-2">
               <span className="material-symbols-outlined text-[#735c00] dark:text-[#d4af37] text-3xl">security</span>
-              <h1 className="text-2xl font-extrabold text-[#735c00] dark:text-[#d4af37] uppercase tracking-widest font-['Manrope']">Win-Way</h1>
+              <h1 className="text-2xl font-extrabold text-[#735c00] dark:text-[#d4af37] uppercase tracking-widest font-['Manrope']">LUCKY WIN</h1>
             </div>
             {/* Premium Gold Bar Accent */}
             <div className="h-1 w-16 bg-gradient-to-r from-primary to-primary-container rounded-full"></div>
@@ -71,7 +71,7 @@ export default function VerifyEmail() {
 
         {/* Footer */}
         <footer className="w-full mt-12 pb-12 bg-[#fbf9f4] dark:bg-stone-950 border-t border-[#d0c5af]/15 max-w-2xl mx-auto px-8 flex flex-col items-center text-center space-y-4 pt-12">
-          <div className="text-sm font-bold text-[#4d4635] tracking-tight">윈웨이 분석 시스템</div>
+          <div className="text-sm font-bold text-[#4d4635] tracking-tight">럭키윈 분석 시스템</div>
           <div className="flex space-x-4 text-[12px] font-['Noto_Sans_KR'] text-[#4d4635] dark:text-stone-500">
             <Link to="#" className="hover:text-[#d4af37] transition-colors">개인정보처리방침</Link>
             <span className="text-outline-variant">|</span>
@@ -80,7 +80,7 @@ export default function VerifyEmail() {
             <Link to="#" className="hover:text-[#d4af37] transition-colors">고객센터</Link>
           </div>
           <p className="font-['Noto_Sans_KR'] text-[12px] leading-relaxed text-stone-500 opacity-90">
-            © 2024 Win-Way Analytical Intelligence. 모든 권리 보유.
+            © 2024 LUCKY WIN Analytical Intelligence. 모든 권리 보유.
           </p>
           {/* Decorative Branding Element */}
           <div className="pt-4">

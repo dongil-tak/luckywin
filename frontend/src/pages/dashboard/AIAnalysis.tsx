@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import lottoDB from '../../data/lottoDB.json';
+import AdSenseBanner from '../../components/AdSenseBanner';
 
 export default function AIAnalysis() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function AIAnalysis() {
       <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제{lottoDB[0].round + 1}회차</span>
@@ -123,13 +124,10 @@ export default function AIAnalysis() {
           </div>
         </section>
 
-        {/* Google Adsense Banner Placeholder */}
-        <section className="flex flex-col items-center space-y-2">
-          <span className="text-[9px] font-bold text-outline uppercase tracking-widest opacity-50">광고</span>
-          <div className="w-full h-[50px] bg-surface-container-high border border-outline-variant rounded flex items-center justify-center overflow-hidden">
-            <p className="text-xs font-medium text-on-surface-variant/40 italic">광고 배너 영역 (320x50)</p>
-          </div>
-        </section>
+        {/* Google Adsense Banner */}
+        <div className="w-full border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
+          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
+        </div>
 
         {/* Dynamic Feedback Text */}
         <div className="text-center py-4">

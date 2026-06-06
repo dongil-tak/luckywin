@@ -7,7 +7,7 @@ export default function PasswordStep4() {
       <header className="fixed top-0 w-full z-50 bg-[#fbf9f4]/70 dark:bg-[#1b1c19]/70 backdrop-blur-xl">
         <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
           <div className="text-xl font-black text-[#735c00] dark:text-[#d4af37] tracking-tighter font-headline">
-            Win-Way
+            LUCKY WIN
           </div>
           <div className="text-[#4d4635] dark:text-[#d0c5af] font-label text-sm font-medium">
             4단계 중 4단계

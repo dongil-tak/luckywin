@@ -50,8 +50,8 @@ export default function BottomNav() {
                   <span className="material-symbols-outlined text-yellow-700" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
                 </div>
                 <div>
-                  <p className="font-bold text-on-surface text-sm">행운의 기록들</p>
-                  <p className="text-xs text-on-surface-variant">서비스가 예측한 1등 번호를 공개합니다</p>
+                  <p className="font-bold text-on-surface text-sm">1등 당첨번호 보기</p>
+                  <p className="text-xs text-on-surface-variant">역대 1등 당첨번호를 확인합니다</p>
                 </div>
                 <span className="material-symbols-outlined text-on-surface-variant/40 ml-auto">chevron_right</span>
               </Link>

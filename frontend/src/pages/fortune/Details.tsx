@@ -13,7 +13,7 @@ export default function Details() {
             <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">arrow_back</span>
           </button>
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제1150회차</span>

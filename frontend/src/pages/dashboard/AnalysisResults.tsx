@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import lottoDB from '../../data/lottoDB.json';
+import EmailInputDialog from '../../components/EmailInputDialog';
+
+import AdSenseBanner from '../../components/AdSenseBanner';
 
 const getNumberColorClass = (n: number) => {
   if (n <= 10) return 'bg-amber-400 text-on-primary-fixed';
@@ -22,38 +25,80 @@ const generateCombination = (fixedNumbers: number[]) => {
 
 export default function AnalysisResults() {
   const location = useLocation();
-  const fixedNumbers = location.state?.selectedNumbers || [];
+  const rawFixedNumbers = location.state?.selectedNumbers;
+  const fixedNumbers = useMemo(() => rawFixedNumbers || [], [rawFixedNumbers]);
   const [combinations, setCombinations] = useState<number[][]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showGenerateButton, setShowGenerateButton] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSave = () => {
+    const email = localStorage.getItem('verified_email');
+    if (email) {
+      handleSaveConfirm(email);
+    } else {
+      setIsEmailModalOpen(true);
+    }
+  };
+
+  const handleSaveConfirm = (email: string) => {
     const entry = {
+      email,
       savedAt: new Date().toISOString(),
       combinations,
+      type: 'ai'
     };
     const existing = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
     existing.unshift(entry);
     localStorage.setItem('savedNumbers', JSON.stringify(existing));
+    
+    // 번호저장 후 결과 페이지를 초기화
+    localStorage.removeItem('ai_proposed');
+    setCombinations([]);
+    setShowGenerateButton(true);
+
     navigate('/saved');
   };
 
-  const checkAndLoadCache = () => {
+  const handleCopy = () => {
+    if (combinations.length === 0) return;
+    const text = combinations
+      .map((comb, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        return `조합 ${letter}: ${comb.map(n => n.toString().padStart(2, '0')).join(', ')}`;
+      })
+      .join('\n');
+    
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        alert('행운 번호가 클립보드에 복사되었습니다!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy: ', err);
+        alert('번호 복사에 실패했습니다.');
+      });
+  };
+
+  const checkAndLoadCache = useCallback(() => {
     const cachedStr = localStorage.getItem('ai_proposed');
     if (cachedStr) {
-      const data = JSON.parse(cachedStr);
-      const deadline = new Date(data.deadline);
-      if (new Date() < deadline) {
-        setCombinations(data.combinations);
-        setShowGenerateButton(false);
-        return true;
+      try {
+        const data = JSON.parse(cachedStr);
+        const deadline = new Date(data.deadline);
+        if (new Date() < deadline) {
+          setCombinations(data.combinations);
+          setShowGenerateButton(false);
+          return true;
+        }
+      } catch {
+        return false;
       }
     }
     return false;
-  };
+  }, []);
 
-  const generateAndSave = () => {
+  const generateAndSave = useCallback(() => {
     setIsLoading(true);
     setShowGenerateButton(false);
     
@@ -76,20 +121,25 @@ export default function AnalysisResults() {
       }));
       setIsLoading(false);
     }, 1500);
-  };
+  }, [fixedNumbers]);
 
   useEffect(() => {
     // If routing directly sets state or it's forced manually, skip cache check
     if (location.state && location.state.selectedNumbers && location.state.selectedNumbers.length > 0) {
-      generateAndSave();
-      return;
+      const timer = setTimeout(() => {
+        generateAndSave();
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
-    const hasValidCache = checkAndLoadCache();
-    if (!hasValidCache) {
-      setShowGenerateButton(true);
-    }
-  }, []);
+    const timer = setTimeout(() => {
+      const hasValidCache = checkAndLoadCache();
+      if (!hasValidCache) {
+        setShowGenerateButton(true);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [location.state, generateAndSave, checkAndLoadCache]);
 
   return (
     <div className="bg-surface font-label text-on-surface antialiased min-h-screen pb-32">
@@ -109,7 +159,7 @@ export default function AnalysisResults() {
       <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제{lottoDB[0].round + 1}회차</span>
@@ -118,13 +168,8 @@ export default function AnalysisResults() {
 
       <main className="pt-24 px-6 max-w-2xl mx-auto">
         {/* AdSense Top Banner */}
-        <div className="mb-8 w-full">
-          <div className="paper-texture border border-outline-variant/20 rounded-lg p-2 flex flex-col items-center justify-center min-h-[100px] relative overflow-hidden group">
-            <div className="absolute top-1 right-2 text-[8px] font-bold text-on-surface-variant/30 uppercase tracking-widest">광고</div>
-            <div className="w-full bg-surface-container/50 border border-dashed border-outline-variant/30 rounded flex items-center justify-center py-6">
-              <span className="text-xs text-on-surface-variant/40 font-medium">구글 애드센스 광고 영역</span>
-            </div>
-          </div>
+        <div className="mb-8 w-full border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
+          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
         </div>
 
         {/* Section Header */}
@@ -157,7 +202,13 @@ export default function AnalysisResults() {
                 const rowNode = (
                   <div key={`row-${idx}`} className="paper-texture p-8 rounded-lg shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 border border-outline-variant/10">
                     <div className="flex flex-col items-start w-full md:w-auto">
-                      <span className="font-headline font-bold text-primary tracking-widest text-sm mb-1 uppercase">조합 {letter}</span>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-headline font-bold text-primary tracking-widest text-sm uppercase">조합 {letter}</span>
+                        <span className="bg-amber-100 text-amber-800 text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                          <span className="material-symbols-outlined text-[10px]">auto_awesome</span>
+                          AI 분석 추천
+                        </span>
+                      </div>
                       <span className="text-[10px] text-on-surface-variant/60 font-medium">조합 ID: 99421-{letter}</span>
                     </div>
                     <div className="flex gap-2 sm:gap-4 items-center justify-between w-full md:w-auto">
@@ -173,11 +224,8 @@ export default function AnalysisResults() {
                 if (idx === 1) {
                   return [
                     rowNode,
-                    <div key="ad" className="w-full py-2">
-                      <div className="paper-texture border border-outline-variant/10 rounded-lg p-2 flex items-center justify-center min-h-[80px] relative group">
-                        <div className="absolute top-1 right-2 text-[8px] font-bold text-on-surface-variant/20 uppercase tracking-widest">광고</div>
-                        <div className="text-[10px] text-on-surface-variant/40 italic">애드센스 광고</div>
-                      </div>
+                    <div key="ad" className="w-full py-2 border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
+                      <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
                     </div>
                   ];
                 }
@@ -186,15 +234,17 @@ export default function AnalysisResults() {
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-              <button onClick={handleSave} className="px-6 py-4 rounded-full bg-surface-container-highest text-on-surface font-bold hover:bg-surface-variant transition-colors active:scale-95 flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined" data-icon="bookmark">bookmark</span> 번호 저장
-              </button>
-              <button onClick={generateAndSave} className="px-6 py-4 rounded-full gold-gradient text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined" data-icon="refresh">refresh</span> 리플레시
-              </button>
-              <button onClick={() => alert('번호가 복사되었습니다.')} className="px-6 py-4 rounded-full bg-surface-container-highest text-on-surface font-bold hover:bg-surface-variant transition-colors active:scale-95 flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined" data-icon="content_copy">content_copy</span> 번호 복사
+            <div className="mt-12 space-y-4 max-w-md mx-auto">
+              <div className="grid grid-cols-2 gap-4">
+                <button onClick={handleSave} className="w-full py-4 rounded-full bg-surface-container-highest text-on-surface font-bold hover:bg-surface-variant transition-colors active:scale-95 flex items-center justify-center gap-2">
+                  <span className="material-symbols-outlined" data-icon="bookmark">bookmark</span> 번호 저장
+                </button>
+                <button onClick={handleCopy} className="w-full py-4 rounded-full bg-surface-container-highest text-on-surface font-bold hover:bg-surface-variant transition-colors active:scale-95 flex items-center justify-center gap-2">
+                  <span className="material-symbols-outlined" data-icon="content_copy">content_copy</span> 번호 복사
+                </button>
+              </div>
+              <button onClick={generateAndSave} className="w-full py-4 rounded-full gold-gradient text-on-primary font-bold shadow-lg shadow-primary/20 hover:scale-[1.01] transition-transform active:scale-95 flex items-center justify-center gap-2">
+                <span className="material-symbols-outlined" data-icon="refresh">refresh</span> 번호 다시 받기
               </button>
             </div>
           </>
@@ -207,6 +257,12 @@ export default function AnalysisResults() {
       </main>
 
       <BottomNav />
+
+      <EmailInputDialog
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        onConfirm={handleSaveConfirm}
+      />
     </div>
   );
 }

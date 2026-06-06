@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api-lotto-store/(.*)", "destination": "https://api.odcloud.kr/$1" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}

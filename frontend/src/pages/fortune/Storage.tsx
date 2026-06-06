@@ -8,7 +8,7 @@ export default function Storage() {
       <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm shadow-stone-200/50 dark:shadow-none">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">윈웨이(Win-Way)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-['Manrope'] font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제1150회차</span>
