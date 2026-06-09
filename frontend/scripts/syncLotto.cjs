@@ -98,7 +98,7 @@ async function main() {
         const bonus = parseInt(bonusMatch[1], 10);
 
         // Parse winners and prize amount
-        const winTextMatch = html.match(/1등\s*당첨금\s*<strong[^>]*>([\d,]+)<\/strong>원\s*\(당첨\s*복권수\s*(\d+)개\)/);
+        const winTextMatch = html.match(/1등\s*당첨금\s*<strong[^>]*>([\d,]+)<\/strong>원\s*\(당첨(?:게임\s*수|복권수|게임수)\s*(\d+)/);
         let winners = 0;
         let prizeAmount = 0;
         if (winTextMatch) {
