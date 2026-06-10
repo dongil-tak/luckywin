@@ -370,8 +370,7 @@ export default function LottoStore() {
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
+          <h1 className="text-xl font-black font-headline text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
         <span className="font-headline font-bold text-lg text-amber-600">제{latestRound}회차</span>
       </header>

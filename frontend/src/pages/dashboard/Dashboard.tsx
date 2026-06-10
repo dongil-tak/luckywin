@@ -113,8 +113,7 @@ export default function Dashboard() {
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 dark:shadow-none z-50">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="edit_square">edit_square</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
+          <h1 className="text-xl font-black font-headline text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
       </header>
 

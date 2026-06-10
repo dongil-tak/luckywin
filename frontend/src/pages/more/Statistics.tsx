@@ -57,8 +57,7 @@ export default function Statistics() {
           <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-container-high active:scale-95 transition-colors">
             <span className="material-symbols-outlined text-on-surface">arrow_back</span>
           </button>
-          <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="query_stats">query_stats</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
+          <h1 className="text-xl font-black font-headline text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
       </header>
 
