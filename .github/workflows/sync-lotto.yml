@@ -30,17 +30,24 @@ jobs:
           cd frontend
           npm run sync-lotto
 
-      - name: Commit and Push Changes
+      - name: Commit, Push, and Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: prj_0ZuXYw6bPVJEYBkaUeH8gRxTQ0D3
+          VERCEL_ORG_ID: team_TavN9JyJsczf7S0D3ik4RmxB
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Check if there are changes in the database file
+
           if git diff --quiet frontend/src/data/lottoDB.json; then
-            echo "No database changes detected."
+            echo "No database changes detected. Skipping commit and deploy."
           else
-            echo "Database updated. Committing and pushing changes..."
+            echo "New round detected. Committing and pushing..."
             git add frontend/src/data/lottoDB.json
             git commit -m "chore: auto-sync lotto database to latest round [skip ci]"
             git push
+
+            echo "Deploying updated database to Vercel production..."
+            npx vercel --prod --yes --token=$VERCEL_TOKEN --cwd=frontend
+            echo "Deployment complete. New winning numbers are now live."
           fi
