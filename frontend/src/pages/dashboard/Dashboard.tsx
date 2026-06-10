@@ -131,141 +131,125 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="pt-16 pb-48 max-w-2xl mx-auto space-y-6">
-        
-        {/* 1. TOP Viewer - 현재 선택 영역 (상단 스크롤 밀착 고정) */}
-        <section className="sticky top-16 z-40 bg-surface-container-lowest p-6 border-b border-outline-variant/15 shadow-md w-full">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex justify-between items-end mb-4">
-            <div>
-              <h2 className="text-lg font-headline font-extrabold text-on-surface mb-0.5">선택 중인 번호</h2>
-              <p className="text-xs font-medium text-on-surface-variant">정확히 6개를 골라 1세트를 완성하세요.</p>
-            </div>
-            <span className="text-xs font-bold bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface">{currentSelection.length} / 6</span>
-          </div>
+      <main className="pt-16 pb-48 max-w-2xl mx-auto">
 
-          <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-6">
-            {slots.map((_, i) => {
-              const num = currentSelection[i];
-              return (
-                <div key={i} className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-headline font-black text-sm sm:text-lg transition-all duration-300 ${
-                  num 
-                    ? `${getNumberColorClass(num)} shadow-md ring-2 ring-white scale-100` 
-                    : 'bg-surface-container-high border-2 border-dashed border-outline-variant/40 text-transparent scale-95'
-                }`}>
-                  {num ? num.toString().padStart(2, '0') : ''}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex gap-2">
-            <button 
-              onClick={handleAddSet}
-              disabled={currentSelection.length !== 6 || savedSets.length >= 5}
-              className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 bg-primary text-white shadow-lg shadow-primary/20 pointer-events-auto"
-            >
-              <span className="material-symbols-outlined text-lg">add_circle</span>
-              {savedSets.length >= 5 ? '최대 세트 완료' : '세트 저장'}
-            </button>
-            <button 
-              onClick={handleSemiAuto}
-              disabled={currentSelection.length === 6 || savedSets.length >= 5}
-              className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 gold-gradient text-white shadow-lg shadow-amber-500/20 pointer-events-auto"
-            >
-              <span className="material-symbols-outlined text-lg">psychology</span>
-              AI 반자동 생성
-            </button>
-            </div>
-          </div>
-        </section>
-
-        {/* 나머지 콘텐츠를 위한 좌우 여백 패딩 컨테이너 */}
-        <div className="px-6 space-y-6">
-          {/* 2. MIDDLE Area - 확정된 세트 리스트 */}
-        <section className="space-y-3">
-          <div className="flex justify-between items-center mb-2 px-2">
-             <h3 className="text-sm font-bold text-on-surface-variant">나의 수동 조합함</h3>
-             <span className="text-[11px] font-black tracking-widest uppercase text-primary bg-primary-container px-2 py-0.5 rounded-full">{savedSets.length} / 5 SETS</span>
-          </div>
-
-          {savedSets.length === 0 ? (
-             <div className="bg-surface-container-low border border-dashed border-outline-variant/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center opacity-70">
-               <span className="material-symbols-outlined text-4xl text-on-surface-variant/50 mb-2">inbox</span>
-               <p className="text-xs font-bold text-on-surface-variant">아직 추가된 조합이 없습니다.</p>
-               <p className="text-[11px] font-medium text-on-surface-variant/60 mt-1">번호 6개를 고른 후 추가 버튼을 눌러주세요.</p>
-             </div>
-          ) : (
-            <div className="space-y-3">
-              {savedSets.map((set, idx) => {
-                const letter = String.fromCharCode(65 + idx); // A, B, C...
+        {/* 1. Sticky - 선택 슬롯 (컴팩트 1줄) */}
+        <section className="sticky top-16 z-40 bg-surface-container-lowest px-5 py-3 border-b border-outline-variant/15 shadow-md w-full">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {slots.map((_, i) => {
+                const num = currentSelection[i];
                 return (
-                  <div key={idx} className="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/20 shadow-sm flex items-center justify-between group animation-fade-in">
-                    <div className="flex flex-col items-start w-full md:w-auto">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-headline font-bold text-primary tracking-widest text-[11px] uppercase">
-                          {set.isAi ? `반자동 세트 ${letter}` : `수동 세트 ${letter}`}
-                        </span>
-                        {set.isAi && (
-                          <span className="bg-amber-100 text-amber-800 text-[8px] font-black px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-[9px]">psychology</span>
-                            AI 반자동
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex gap-1 sm:gap-2">
-                        {set.numbers.map(n => (
-                          <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-headline font-bold text-[11px] shadow-sm ${getNumberColorClass(n)}`}>
-                            {n.toString().padStart(2, '0')}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <button onClick={() => handleDeleteSet(idx)} className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-red-500 hover:bg-red-50 transition-colors">
-                       <span className="material-symbols-outlined text-lg">delete</span>
-                    </button>
+                  <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-headline font-black text-sm transition-all duration-200 ${
+                    num
+                      ? `${getNumberColorClass(num)} shadow-md ring-2 ring-white scale-100`
+                      : 'bg-surface-container-high border-2 border-dashed border-outline-variant/30 text-transparent scale-95'
+                  }`}>
+                    {num ? num.toString().padStart(2, '0') : ''}
                   </div>
                 );
               })}
-              
-              {/* List Inner Save Button */}
-              {savedSets.length > 0 && (
-                <div className="pt-4 pb-2 animation-fade-in">
+            </div>
+            <span className="text-xs font-bold bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface shrink-0">{currentSelection.length} / 6</span>
+          </div>
+        </section>
+
+        {/* 2. 번호 선택 패드 - sticky 바로 아래 (스크롤 없이 노출) */}
+        <div className="px-5 pt-4 pb-3">
+          <section className={`bg-surface-container-low rounded-3xl p-4 transition-opacity duration-300 ${savedSets.length >= 5 ? 'opacity-50 pointer-events-none' : ''}`}>
+            <div className="grid grid-cols-5 gap-2">
+              {Array.from({ length: 45 }).map((_, i) => {
+                const num = i + 1;
+                const isSelected = currentSelection.includes(num);
+                if (isSelected) {
+                  return (
+                    <button key={num} onClick={() => toggleNumber(num)} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-primary text-white shadow-md shadow-primary/20 active:scale-95 transition-transform ring-2 ring-primary ring-offset-2 ring-offset-surface-container-low">{num}</button>
+                  );
+                }
+                return (
+                  <button key={num} onClick={() => toggleNumber(num)} disabled={currentSelection.length >= 6 && !isSelected} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high active:scale-90 transition-all shadow-sm border border-outline-variant/10 disabled:opacity-30">{num}</button>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+
+        {/* 3. 액션 버튼 - 번호 패드 바로 아래 */}
+        <div className="px-5 pb-5 flex gap-2">
+          <button
+            onClick={handleAddSet}
+            disabled={currentSelection.length !== 6 || savedSets.length >= 5}
+            className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 bg-primary text-white shadow-lg shadow-primary/20 pointer-events-auto"
+          >
+            <span className="material-symbols-outlined text-lg">add_circle</span>
+            {savedSets.length >= 5 ? '최대 세트 완료' : '세트 저장'}
+          </button>
+          <button
+            onClick={handleSemiAuto}
+            disabled={currentSelection.length === 6 || savedSets.length >= 5}
+            className="flex-1 py-4 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:bg-surface-container-high disabled:text-on-surface-variant/50 gold-gradient text-white shadow-lg shadow-amber-500/20 pointer-events-auto"
+          >
+            <span className="material-symbols-outlined text-lg">psychology</span>
+            AI 반자동 생성
+          </button>
+        </div>
+
+        {/* 4. 저장된 세트 + AdSense - 하단 스크롤 영역 */}
+        <div className="px-5 space-y-4">
+
+          {/* 세트 리스트 (세트가 있을 때만 표시) */}
+          {savedSets.length > 0 && (
+            <section className="space-y-3">
+              <div className="flex justify-between items-center px-1">
+                <h3 className="text-sm font-bold text-on-surface-variant">나의 수동 조합함</h3>
+                <span className="text-[11px] font-black tracking-widest uppercase text-primary bg-primary-container px-2 py-0.5 rounded-full">{savedSets.length} / 5 SETS</span>
+              </div>
+              <div className="space-y-3">
+                {savedSets.map((set, idx) => {
+                  const letter = String.fromCharCode(65 + idx);
+                  return (
+                    <div key={idx} className="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/20 shadow-sm flex items-center justify-between group animation-fade-in">
+                      <div className="flex flex-col items-start w-full">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-headline font-bold text-primary tracking-widest text-[11px] uppercase">
+                            {set.isAi ? `반자동 세트 ${letter}` : `수동 세트 ${letter}`}
+                          </span>
+                          {set.isAi && (
+                            <span className="bg-amber-100 text-amber-800 text-[8px] font-black px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                              <span className="material-symbols-outlined text-[9px]">psychology</span>
+                              AI 반자동
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex gap-1.5">
+                          {set.numbers.map(n => (
+                            <div key={n} className={`w-8 h-8 rounded-full flex items-center justify-center font-headline font-bold text-[11px] shadow-sm ${getNumberColorClass(n)}`}>
+                              {n.toString().padStart(2, '0')}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <button onClick={() => handleDeleteSet(idx)} className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-red-500 hover:bg-red-50 transition-colors shrink-0">
+                        <span className="material-symbols-outlined text-lg">delete</span>
+                      </button>
+                    </div>
+                  );
+                })}
+                <div className="pt-1 pb-2">
                   <button onClick={handleFinalSave} className="w-full bg-surface-container-highest text-on-surface hover:bg-surface-variant py-4 rounded-xl font-headline font-extrabold text-[14px] flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <span className="material-symbols-outlined text-xl text-primary" data-icon="bookmark">bookmark</span>
+                    <span className="material-symbols-outlined text-xl text-primary">bookmark</span>
                     번호 저장하기
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            </section>
           )}
-        </section>
 
-        {/* Google Adsense Banner above Number Pad */}
-        <div className="w-full border border-outline-variant/10 rounded-2xl overflow-hidden bg-surface-container-low/30 my-4">
-          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
-        </div>
-
-        {/* 3. BOTTOM - Number Pad (1~45) */}
-        <section className={`bg-surface-container-low rounded-3xl p-6 transition-opacity duration-300 ${savedSets.length >= 5 ? 'opacity-50 pointer-events-none' : ''}`}>
-          <h3 className="text-sm font-bold text-on-surface mb-4 text-center">번호 선택 패드</h3>
-          <div className="grid grid-cols-5 sm:grid-cols-7 gap-2.5 sm:gap-3">
-            {Array.from({ length: 45 }).map((_, i) => {
-              const num = i + 1;
-              const isSelected = currentSelection.includes(num);
-              
-              if (isSelected) {
-                return (
-                  <button key={num} onClick={() => toggleNumber(num)} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-primary text-white shadow-md shadow-primary/20 active:scale-95 transition-transform ring-2 ring-primary ring-offset-2 ring-offset-surface-container-low">{num}</button>
-                );
-              }
-
-              return (
-                <button key={num} onClick={() => toggleNumber(num)} disabled={currentSelection.length >= 6 && !isSelected} className="w-full aspect-square rounded-full flex items-center justify-center text-sm font-extrabold bg-surface-container-lowest text-on-surface hover:bg-surface-container-high active:scale-90 transition-all shadow-sm border border-outline-variant/10 disabled:opacity-30">{num}</button>
-              );
-            })}
+          {/* AdSense */}
+          <div className="w-full border border-outline-variant/10 rounded-2xl overflow-hidden bg-surface-container-low/30">
+            <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
           </div>
-        </section>
+
         </div>
       </main>
 
