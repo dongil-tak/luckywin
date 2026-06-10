@@ -421,7 +421,7 @@ export default function LottoStore() {
               <p className="text-[9px] text-on-surface-variant/50 mt-1 uppercase tracking-wider font-mono">Status: {debugInfo}</p>
               {showTimeoutGuide && (
                 <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/50 rounded-xl text-[10px] text-amber-800 dark:text-amber-300 leading-relaxed max-w-sm">
-                  ⚠️ <strong>로딩이 길어지는 경우:</strong> 카카오 개발자 센터의 [내 애플리케이션 &gt; 플랫폼 &gt; Web]에 현재 도메인(<code>https://frontend-one-coral-12.vercel.app</code> 또는 <code>http://localhost:5173</code>)이 등록되어 있는지 확인해주세요.
+                  ⚠️ <strong>로딩이 길어지는 경우:</strong> 카카오 개발자 센터의 [내 애플리케이션 &gt; 플랫폼 &gt; Web]에 현재 도메인(<code>https://luckywin.kr</code> 또는 <code>http://localhost:5173</code>)이 등록되어 있는지 확인해주세요.
                 </div>
               )}
             </div>
