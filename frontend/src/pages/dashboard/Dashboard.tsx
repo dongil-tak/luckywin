@@ -3,6 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import EmailInputDialog from '../../components/EmailInputDialog';
 import AdSenseBanner from '../../components/AdSenseBanner';
+import lottoDB from '../../data/lottoDB.json';
+
+// 1회~현재까지 전체 당첨번호 빈도 가중치
+const numberWeights = (() => {
+  const counts = new Array(46).fill(0);
+  lottoDB.forEach((item: { numbers: number[] }) => item.numbers.forEach(n => counts[n]++));
+  return counts;
+})();
 
 const getNumberColorClass = (n: number) => {
   if (n <= 10) return 'bg-[#facc15] text-[#713f12]';
@@ -58,18 +66,24 @@ export default function Dashboard() {
     if (savedSets.length >= 5) return;
     if (currentSelection.length >= 6) return;
 
-    // AI가 최적의 번호를 조합하여 제공한다는 컨셉에 맞춰 AI 알고리즘 메시지를 보여주거나 처리
-    const available = Array.from({ length: 45 }).map((_, i) => i + 1).filter(n => !currentSelection.includes(n));
+    const selected = new Set<number>(currentSelection);
     const toPick = 6 - currentSelection.length;
-    
-    const picked = [];
+
     for (let i = 0; i < toPick; i++) {
-        const randIndex = Math.floor(Math.random() * available.length);
-        picked.push(available[randIndex]);
-        available.splice(randIndex, 1);
+      let total = 0;
+      for (let n = 1; n <= 45; n++) {
+        if (!selected.has(n)) total += numberWeights[n];
+      }
+      let rand = Math.random() * total;
+      for (let n = 1; n <= 45; n++) {
+        if (!selected.has(n)) {
+          rand -= numberWeights[n];
+          if (rand <= 0) { selected.add(n); break; }
+        }
+      }
     }
 
-    const finalSet = [...currentSelection, ...picked].sort((a, b) => a - b);
+    const finalSet = Array.from(selected).sort((a, b) => a - b);
     setSavedSets([...savedSets, { numbers: finalSet, isAi: true }]);
     setCurrentSelection([]);
   };

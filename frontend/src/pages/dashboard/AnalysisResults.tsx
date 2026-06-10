@@ -14,11 +14,32 @@ const getNumberColorClass = (n: number) => {
   return 'bg-emerald-500 text-white';
 };
 
-const generateCombination = (fixedNumbers: number[]) => {
-  const nums = new Set(fixedNumbers);
+// 1회~현재까지 전체 당첨번호 빈도 가중치 (한 번만 계산)
+const numberWeights = (() => {
+  const counts = new Array(46).fill(0);
+  lottoDB.forEach(item => item.numbers.forEach(n => counts[n]++));
+  return counts;
+})();
+
+const weightedPick = (exclude: Set<number>): number => {
+  let total = 0;
+  for (let n = 1; n <= 45; n++) {
+    if (!exclude.has(n)) total += numberWeights[n];
+  }
+  let rand = Math.random() * total;
+  for (let n = 1; n <= 45; n++) {
+    if (!exclude.has(n)) {
+      rand -= numberWeights[n];
+      if (rand <= 0) return n;
+    }
+  }
+  return 45;
+};
+
+const generateCombination = (fixedNumbers: number[]): number[] => {
+  const nums = new Set<number>(fixedNumbers);
   while (nums.size < 6) {
-    const r = Math.floor(Math.random() * 45) + 1;
-    nums.add(r);
+    nums.add(weightedPick(nums));
   }
   return Array.from(nums).sort((a, b) => a - b);
 };
