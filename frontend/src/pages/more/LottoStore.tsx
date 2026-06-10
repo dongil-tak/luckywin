@@ -270,12 +270,18 @@ export default function LottoStore() {
     const bounds = new kakao.maps.LatLngBounds();
     let hasValidMarker = false;
 
-    // 주소 검색을 통한 마커 배치
-    paginatedStores.forEach((store) => {
+    // 주소 검색을 통한 마커 배치 (index 0 = 첫번째 명당 → 초기 지도 중심)
+    paginatedStores.forEach((store, index) => {
       const cleanAddress = store.address.split('(')[0].trim();
       geocoder.addressSearch(cleanAddress, (result: any, status: any) => {
         if (status === kakao.maps.services.Status.OK) {
           const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+          // 첫번째 명당 위치를 초기 지도 중심으로 설정
+          if (index === 0) {
+            map.setCenter(coords);
+            map.setLevel(5);
+          }
 
           const marker = new kakao.maps.Marker({
             map: map,
