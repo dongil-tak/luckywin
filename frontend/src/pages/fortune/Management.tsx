@@ -81,7 +81,7 @@ export default function Management() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between bg-white/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50 px-6">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
         <div className="flex items-center">
           <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제{latestRound.round}회차</span>
@@ -91,7 +91,7 @@ export default function Management() {
       <main className="pt-24 px-6 max-w-2xl mx-auto space-y-8">
         {/* Section Header */}
         <div className="mb-2">
-          <h1 className="text-3xl font-black font-headline text-on-surface tracking-tight mb-2">금주의 당첨현황</h1>
+          <h1 className="text-xl font-bold font-headline tracking-tight text-on-surface mb-2">금주의 당첨현황</h1>
           <p className="text-on-surface-variant text-sm font-medium">이번 주 당첨 결과를 분석하고 서비스 성과를 확인하세요.</p>
         </div>
 
@@ -139,7 +139,7 @@ export default function Management() {
           <div className="flex justify-between items-start mb-6 align-top">
             <div>
               <p className="text-xs font-bold text-primary mb-1 uppercase tracking-wider">
-                {displayRound.round === latestRound.round ? 'Latest Draw' : 'Search Result'}
+                {displayRound.round === latestRound.round ? '최신 회차' : '검색 결과'}
               </p>
               <h3 className="font-headline font-extrabold text-2xl text-on-surface">제{displayRound.round}회 당첨번호</h3>
               <p className="text-xs font-medium text-on-surface-variant/70 tracking-wide mt-1">추첨일 : {formattedDate}</p>

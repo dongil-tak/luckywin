@@ -116,7 +116,7 @@ export default function SavedNumbers() {
         <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
-            <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+            <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
           </div>
         </header>
 
@@ -161,7 +161,7 @@ export default function SavedNumbers() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
       </header>
 
@@ -169,7 +169,7 @@ export default function SavedNumbers() {
         {/* Title + 본인확인 해제 */}
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-3xl font-headline font-bold text-on-surface tracking-tight">저장된 번호보기</h2>
+            <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">저장된 번호보기</h2>
             <p className="text-sm font-medium text-on-surface-variant mt-1">저장된 번호 조합과 추첨 결과를 확인하세요</p>
           </div>
           <button

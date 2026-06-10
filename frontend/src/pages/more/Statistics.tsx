@@ -58,14 +58,14 @@ export default function Statistics() {
             <span className="material-symbols-outlined text-on-surface">arrow_back</span>
           </button>
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="query_stats">query_stats</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">번호통계</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
       </header>
 
       <main className="pt-24 px-6 max-w-2xl mx-auto space-y-6">
         <div className="text-center mb-8">
           <p className="text-sm font-bold text-primary mb-1 tracking-widest uppercase">역대 통합 누적 데이터</p>
-          <h2 className="text-2xl font-headline font-extrabold tracking-tight">1등 번호 최다 출현 분석</h2>
+          <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">1등 번호 최다 출현 분석</h2>
           <p className="text-xs text-on-surface-variant font-medium mt-2">
             총 <strong className="text-on-surface">{stats.totalDraws.toLocaleString()}회차</strong>의 정규 당첨번호 데이터를 분석했습니다.
           </p>

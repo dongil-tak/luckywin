@@ -10,7 +10,7 @@ export default function VerifyEmail() {
           <div className="flex flex-col items-center mx-auto space-y-2">
             <div className="flex items-center space-x-2">
               <span className="material-symbols-outlined text-[#735c00] dark:text-[#d4af37] text-3xl">security</span>
-              <h1 className="text-2xl font-extrabold text-[#735c00] dark:text-[#d4af37] uppercase tracking-widest font-['Manrope']">LUCKY WIN</h1>
+              <h1 className="text-2xl font-extrabold text-[#735c00] dark:text-[#d4af37] tracking-widest font-['Manrope']">Lucky Win</h1>
             </div>
             {/* Premium Gold Bar Accent */}
             <div className="h-1 w-16 bg-gradient-to-r from-primary to-primary-container rounded-full"></div>
@@ -80,7 +80,7 @@ export default function VerifyEmail() {
             <Link to="#" className="hover:text-[#d4af37] transition-colors">고객센터</Link>
           </div>
           <p className="font-['Noto_Sans_KR'] text-[12px] leading-relaxed text-stone-500 opacity-90">
-            © 2024 LUCKY WIN Analytical Intelligence. 모든 권리 보유.
+            © 2024 Lucky Win Analytical Intelligence. 모든 권리 보유.
           </p>
           {/* Decorative Branding Element */}
           <div className="pt-4">

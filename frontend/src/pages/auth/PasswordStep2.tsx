@@ -14,7 +14,7 @@ export default function PasswordStep2() {
             </button>
           </div>
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <span className="text-xl font-black text-primary tracking-tighter font-headline">LUCKY WIN</span>
+            <span className="text-xl font-black text-primary tracking-tighter font-headline">Lucky Win</span>
           </div>
           <div className="flex items-center justify-end w-1/3">
             <span className="text-sm font-bold text-brand-orange font-body">제1150회차</span>

@@ -170,7 +170,7 @@ export default function LuckyHistory() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm shadow-stone-200/50">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
         <span className="font-headline font-bold text-lg text-amber-600">제{lottoDB[0].round + 1}회차</span>
       </header>
@@ -228,7 +228,7 @@ export default function LuckyHistory() {
       <main className="pt-24 pb-48 px-6 max-w-2xl mx-auto space-y-6">
         {/* Title Section */}
         <div className="border-b border-outline-variant/30 pb-4">
-          <h2 className="text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">명예의 전당</h2>
+          <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface mb-1">명예의 전당</h2>
           <p className="text-sm font-medium text-on-surface-variant">당첨 번호 조회 및 우리 앱 예측 매핑 통계입니다.</p>
         </div>
 

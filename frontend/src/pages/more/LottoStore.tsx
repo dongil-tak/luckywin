@@ -371,7 +371,7 @@ export default function LottoStore() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
         <span className="font-headline font-bold text-lg text-amber-600">제{latestRound}회차</span>
       </header>
@@ -379,7 +379,7 @@ export default function LottoStore() {
       <main className="pt-24 px-6 max-w-2xl mx-auto">
         {/* Title */}
         <div className="mb-6">
-          <h2 className="text-3xl font-headline font-bold text-on-surface tracking-tight">로또 복권 판매소</h2>
+          <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">로또 복권 판매소</h2>
           <p className="text-sm text-on-surface-variant mt-2">전국의 로또 복권 판매처를 실시간 공공데이터로 검색해보세요</p>
         </div>
 

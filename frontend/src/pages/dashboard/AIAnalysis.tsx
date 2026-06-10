@@ -21,7 +21,7 @@ export default function AIAnalysis() {
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="analytics">analytics</span>
-          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">럭키윈(LUCKY WIN)</h1>
+          <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
         </div>
         <div className="flex items-center gap-4">
           <span className="font-headline font-bold text-lg tracking-tight text-amber-600 dark:text-amber-400">제{lottoDB[0].round + 1}회차</span>
@@ -44,7 +44,7 @@ export default function AIAnalysis() {
             <div className="flex justify-between items-start mb-4 relative z-10">
               <div>
                 <span className="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1 block">신경망 엔진 상태</span>
-                <h2 className="text-2xl font-headline font-extrabold tracking-tight">AI 분석 엔진</h2>
+                <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">AI 분석 엔진</h2>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-primary ai-pulse"></span>

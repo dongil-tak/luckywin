@@ -10,7 +10,7 @@ export default function Login() {
         <div className="flex justify-between items-center px-6 h-16 w-full mx-auto">
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-on-surface hover:opacity-80 transition-opacity cursor-pointer">menu</span>
-            <h1 className="text-xl font-black text-[#735c00] tracking-tighter font-headline">LUCKY WIN</h1>
+            <h1 className="text-xl font-black text-[#735c00] tracking-tighter font-headline">Lucky Win</h1>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[#d4af37] text-xs font-bold tracking-tight bg-surface-container-high px-3 py-1 rounded-full">1150회차</span>
