@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
+import AdSenseBanner from '../../components/AdSenseBanner';
 import lottoDB from '../../data/lottoDB.json';
 
 const getNumberColorClass = (n: number) => {
@@ -181,6 +182,9 @@ export default function Management() {
             </div>
           </div>
         </div>
+
+        {/* Ad — 당첨번호와 당첨점 정보 사이 */}
+        <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
 
         {/* 2. 1등 당첨점 정보 Card */}
         <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_15px_40px_rgba(27,28,25,0.03)] border border-outline-variant/10">
