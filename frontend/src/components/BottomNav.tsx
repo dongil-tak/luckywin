@@ -89,7 +89,7 @@ export default function BottomNav() {
       )}
 
       {/* Nav Bar */}
-      <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f4]/80 dark:bg-[#1b1c19]/80 backdrop-blur-xl rounded-t-[2rem] shadow-[0_-4px_40px_rgba(27,28,25,0.06)]">
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#fbf9f4]/80 dark:bg-[#1b1c19]/80 backdrop-blur-xl rounded-t-[2rem] shadow-[0_-4px_40px_rgba(27,28,25,0.06)]">
         <Link
           to="/dashboard"
           className={`flex flex-col items-center justify-center active:scale-90 duration-200 ${isDashboard ? activeClass : inactiveClass}`}

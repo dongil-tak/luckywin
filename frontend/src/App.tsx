@@ -7,9 +7,6 @@ import AnalysisResults from './pages/dashboard/AnalysisResults';
 
 // Fortune Imports
 import Management from './pages/fortune/Management';
-import Storage from './pages/fortune/Storage';
-import Details from './pages/fortune/Details';
-import WinningItems from './pages/fortune/WinningItems';
 import SavedNumbers from './pages/saved/SavedNumbers';
 import LuckyHistory from './pages/more/LuckyHistory';
 import LottoStore from './pages/more/LottoStore';
@@ -24,12 +21,7 @@ function App() {
         <Route path="analysis" element={<AIAnalysis />} />
         <Route path="results" element={<AnalysisResults />} />
       </Route>
-      <Route path="/fortune">
-        <Route index element={<Management />} />
-        <Route path="storage" element={<Storage />} />
-        <Route path="details" element={<Details />} />
-        <Route path="winning" element={<WinningItems />} />
-      </Route>
+      <Route path="/fortune" element={<Management />} />
       <Route path="/saved" element={<SavedNumbers />} />
       <Route path="/lucky-history" element={<LuckyHistory />} />
       <Route path="/lotto-store" element={<LottoStore />} />

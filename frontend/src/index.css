@@ -11,9 +11,18 @@
     line-height: 1;
 }
 
+html {
+    background-color: #e8e5df;
+}
+
 body {
     @apply font-body bg-surface-container-low text-on-surface antialiased;
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
     min-height: max(884px, 100dvh);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.15);
+    position: relative;
 }
 
 @layer utilities {

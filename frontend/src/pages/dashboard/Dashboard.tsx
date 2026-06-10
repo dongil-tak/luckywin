@@ -111,7 +111,7 @@ export default function Dashboard() {
   return (
     <div className="bg-background text-on-background font-label antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen">
       {/* TopAppBar */}
-      <header className="fixed top-0 left-0 w-full h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 dark:shadow-none z-50">
+      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 dark:shadow-none z-50">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-amber-600 dark:text-amber-400" data-icon="edit_square">edit_square</span>
           <h1 className="text-xl font-black text-stone-900 dark:text-stone-50 tracking-tighter">번호 직접선택</h1>

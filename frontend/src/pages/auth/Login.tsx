@@ -6,8 +6,8 @@ export default function Login() {
   return (
     <div className="bg-background text-on-surface min-h-screen flex flex-col">
       {/* TopAppBar */}
-      <header className="fixed top-0 w-full z-50 bg-[#fbf9f4]/70 backdrop-blur-xl shadow-[0_20px_40px_rgba(27,28,25,0.04)]">
-        <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
+      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-[#fbf9f4]/70 backdrop-blur-xl shadow-[0_20px_40px_rgba(27,28,25,0.04)]">
+        <div className="flex justify-between items-center px-6 h-16 w-full mx-auto">
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-on-surface hover:opacity-80 transition-opacity cursor-pointer">menu</span>
             <h1 className="text-xl font-black text-[#735c00] tracking-tighter font-headline">LUCKY WIN</h1>

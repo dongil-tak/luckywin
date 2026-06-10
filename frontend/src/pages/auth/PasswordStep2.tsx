@@ -6,8 +6,8 @@ export default function PasswordStep2() {
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col">
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl">
-        <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto relative">
+      <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-background/80 backdrop-blur-xl">
+        <div className="flex justify-between items-center px-6 h-16 w-full mx-auto relative">
           <div className="flex items-center w-1/3">
             <button aria-label="뒤로 가기" className="flex items-center justify-center p-2 -ml-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onClick={() => navigate(-1)}>
               <span className="material-symbols-outlined text-2xl">chevron_left</span>

@@ -5,7 +5,7 @@ export default function PasswordStep4() {
     <div className="bg-background text-on-background font-body min-h-screen flex flex-col">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full z-50 bg-[#fbf9f4]/70 dark:bg-[#1b1c19]/70 backdrop-blur-xl">
-        <div className="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
+        <div className="flex justify-between items-center px-6 h-16 w-full mx-auto">
           <div className="text-xl font-black text-[#735c00] dark:text-[#d4af37] tracking-tighter font-headline">
             LUCKY WIN
           </div>
@@ -71,7 +71,7 @@ export default function PasswordStep4() {
       </div>
 
       {/* Background Decorative Elements */}
-      <div className="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-40">
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-full -z-10 pointer-events-none opacity-40">
         <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-primary-container/20 rounded-full blur-[100px]"></div>
         <div className="absolute bottom-[10%] right-[5%] w-80 h-80 bg-surface-container-highest/50 rounded-full blur-[120px]"></div>
       </div>
