@@ -73,9 +73,9 @@ export default function VerifyEmail() {
         <footer className="w-full mt-12 pb-12 bg-[#fbf9f4] dark:bg-stone-950 border-t border-[#d0c5af]/15 max-w-2xl mx-auto px-8 flex flex-col items-center text-center space-y-4 pt-12">
           <div className="text-sm font-bold text-[#4d4635] tracking-tight">럭키윈 분석 시스템</div>
           <div className="flex space-x-4 text-[12px] font-['Noto_Sans_KR'] text-[#4d4635] dark:text-stone-500">
-            <Link to="#" className="hover:text-[#d4af37] transition-colors">개인정보처리방침</Link>
+            <Link to="/privacy" className="hover:text-[#d4af37] transition-colors">개인정보처리방침</Link>
             <span className="text-outline-variant">|</span>
-            <Link to="#" className="hover:text-[#d4af37] transition-colors">이용약관</Link>
+            <Link to="/terms" className="hover:text-[#d4af37] transition-colors">이용약관</Link>
             <span className="text-outline-variant">|</span>
             <Link to="#" className="hover:text-[#d4af37] transition-colors">고객센터</Link>
           </div>

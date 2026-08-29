@@ -84,7 +84,8 @@ export default function Login() {
               <div className="w-[1px] h-3 bg-outline-variant self-center"></div>
               <a className="text-xs font-label text-outline hover:text-on-surface transition-colors" href="#">고객센터</a>
               <div className="w-[1px] h-3 bg-outline-variant self-center"></div>
-              <a className="text-xs font-label text-outline hover:text-on-surface transition-colors" href="#">이용약관</a>
+              <Link className="text-xs font-label text-outline hover:text-on-surface transition-colors" to="/terms">이용약관</Link>
+              <Link className="text-xs font-label text-outline hover:text-on-surface transition-colors" to="/privacy">개인정보처리방침</Link>
             </div>
           </div>
         </div>
