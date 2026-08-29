@@ -4,7 +4,6 @@ import BottomNav from '../../components/BottomNav';
 import lottoDB from '../../data/lottoDB.json';
 import EmailInputDialog from '../../components/EmailInputDialog';
 
-import AdSenseBanner from '../../components/AdSenseBanner';
 
 const getNumberColorClass = (n: number) => {
   if (n <= 10) return 'bg-amber-400 text-on-primary-fixed';
@@ -14,11 +13,13 @@ const getNumberColorClass = (n: number) => {
   return 'bg-emerald-500 text-white';
 };
 
-// 1회~현재까지 전체 당첨번호 빈도 가중치 (한 번만 계산)
+// 전체 회차 빈도 + 최근 100회차 2배 가중치
 const numberWeights = (() => {
-  const counts = new Array(46).fill(0);
-  lottoDB.forEach(item => item.numbers.forEach(n => counts[n]++));
-  return counts;
+  const all = new Array(46).fill(0);
+  const recent = new Array(46).fill(0);
+  lottoDB.forEach(item => item.numbers.forEach(n => all[n]++));
+  lottoDB.slice(0, 100).forEach(item => item.numbers.forEach(n => recent[n]++));
+  return all.map((w, i) => w + recent[i] * 2);
 })();
 
 const weightedPick = (exclude: Set<number>): number => {
@@ -163,12 +164,12 @@ export default function AnalysisResults() {
   }, [location.state, generateAndSave, checkAndLoadCache]);
 
   return (
-    <div className="bg-surface font-label text-on-surface antialiased min-h-screen pb-32">
+    <div className="bg-surface font-label text-on-surface antialiased min-h-screen pb-28">
       {isLoading && (
         <div className="fixed inset-0 z-[200] bg-background flex flex-col items-center justify-center gap-6">
           <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
           <div className="text-center space-y-2">
-            <h2 className="text-xl font-headline font-bold text-on-surface">당첨번호를 생성 중입니다.</h2>
+            <h2 className="text-xl font-headline font-bold text-on-surface">번호 조합을 만들고 있습니다.</h2>
             <p className="text-sm text-on-surface-variant">스마트 알고리즘이 작동 중입니다...</p>
           </div>
           <div className="w-64 bg-surface-container-high rounded-full h-1.5 overflow-hidden">
@@ -186,32 +187,23 @@ export default function AnalysisResults() {
         </div>
       </header>
 
-      <main className="pt-24 px-6 max-w-2xl mx-auto">
-        {/* AdSense Top Banner */}
-        <div className="mb-8 w-full border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
-          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
-        </div>
+      <main className="pt-20 px-6 max-w-2xl mx-auto">
 
-        {/* Section Header */}
-        <div className="mb-10 text-center">
-          <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface mb-2">분석 결과</h2>
-          <p className="text-on-surface-variant font-body">과거 당첨 데이터의 확률 밀도를 기반으로 생성된 조합입니다.</p>
-        </div>
-
-        {/* Conditional View: Empty State vs Result Canvas */}
+{/* Conditional View: Empty State vs Result Canvas */}
         {showGenerateButton ? (
-          <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+          <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
             <div className="w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center mb-6">
               <span className="material-symbols-outlined text-5xl text-on-surface-variant">psychology</span>
             </div>
-            <h3 className="text-2xl font-headline font-bold mb-2">제안된 번호가 없습니다</h3>
-            <p className="text-sm text-on-surface-variant mb-10 max-w-sm">이번 주 분석 내역이 초기화되었습니다. 아래 버튼을 눌러 새로운 행운의 번호를 제안받으세요.</p>
-            <button 
-              onClick={generateAndSave} 
+            <h3 className="text-2xl font-headline font-bold mb-10">Lucky 주인공이 되어보세요.</h3>
+            <button
+              onClick={generateAndSave}
               className="px-10 py-4 text-lg rounded-full gold-gradient text-white font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95 flex items-center justify-center gap-2"
             >
-              <span className="material-symbols-outlined" data-icon="magic_button">magic_button</span> 행운번호 받기
+              <span className="material-symbols-outlined" data-icon="magic_button">magic_button</span> AI Lucky lotto 번호 받기
             </button>
+            <p className="text-xs text-on-surface-variant mt-3">과거 당첨 데이터의 확률 밀도를 기반으로 생성된 조합입니다.</p>
+            <p className="text-xs text-on-surface-variant mt-1">제공된 행운의 번호는 당첨을 보장하지 않습니다. 책임감있게 즐겨주세요.</p>
           </div>
         ) : (
           <>
@@ -241,14 +233,6 @@ export default function AnalysisResults() {
                   </div>
                 );
 
-                if (idx === 1) {
-                  return [
-                    rowNode,
-                    <div key="ad" className="w-full py-2 border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
-                      <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
-                    </div>
-                  ];
-                }
                 return rowNode;
               })}
             </div>
@@ -270,10 +254,6 @@ export default function AnalysisResults() {
           </>
         )}
 
-        {/* Meta Info Card */}
-        <div className="mt-16 bg-surface-container-low p-6 rounded-lg text-center">
-          <p className="text-xs text-on-surface-variant leading-relaxed">표시된 결과는 과거 당첨 패턴을 기반으로 한 수학적 알고리즘으로 생성되었습니다. <br/> 이 번호들이 당첨을 보장하지 않음을 유의해 주시기 바랍니다. 책임감 있게 즐겨주세요.</p>
-        </div>
       </main>
 
       <BottomNav />

@@ -82,7 +82,7 @@ export default function LuckyHistory() {
     return d;
   };
 
-  // 우리 앱 배출/당첨 데이터 계산
+  // 내가 저장한 조합과 당첨번호 대조 계산
   const appWinningHistory = useMemo((): AppWinningHistoryItem[] => {
     try {
       const allEntries = JSON.parse(localStorage.getItem('savedNumbers') || '[]');
@@ -156,16 +156,15 @@ export default function LuckyHistory() {
       });
 
       const totalWins = appWinningHistory.length;
-      const winRate = totalGenerated > 0 ? ((totalWins / totalGenerated) * 100).toFixed(1) : '0.0';
 
-      return { totalGenerated, totalWins, wins, winRate };
+      return { totalGenerated, totalWins, wins };
     } catch (e) {
-      return { totalGenerated: 0, totalWins: 0, wins: { '1등': 0, '2등': 0, '3등': 0, '4등': 0, '5등': 0 }, winRate: '0.0' };
+      return { totalGenerated: 0, totalWins: 0, wins: { '1등': 0, '2등': 0, '3등': 0, '4등': 0, '5등': 0 } };
     }
   }, [appWinningHistory]);
 
   return (
-    <div className="bg-surface text-on-surface font-label min-h-screen pb-32">
+    <div className="bg-surface text-on-surface font-label min-h-screen pb-28">
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md z-50 shadow-sm shadow-stone-200/50">
         <div className="flex items-center gap-2">
@@ -224,11 +223,11 @@ export default function LuckyHistory() {
         </div>
       )}
 
-      <main className="pt-24 pb-48 px-6 max-w-2xl mx-auto space-y-6">
+      <main className="pt-20 px-6 max-w-2xl mx-auto space-y-6">
         {/* Title Section */}
         <div className="border-b border-outline-variant/30 pb-4">
           <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface mb-1">명예의 전당</h2>
-          <p className="text-sm font-medium text-on-surface-variant">당첨 번호 조회 및 우리 앱 예측 매핑 통계입니다.</p>
+          <p className="text-sm font-medium text-on-surface-variant">내가 저장한 번호와 실제 당첨번호 대조 내역입니다.</p>
         </div>
 
         {/* Tab Selector */}
@@ -243,7 +242,7 @@ export default function LuckyHistory() {
             onClick={() => setActiveTab('app')}
             className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${activeTab === 'app' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}`}
           >
-            우리 앱 배출 성과
+            내 저장 번호 대조 결과
           </button>
         </div>
 
@@ -289,18 +288,14 @@ export default function LuckyHistory() {
         ) : (
           <div className="space-y-8 animate-fadeIn">
             {/* Stat Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
-                <p className="text-[10px] font-bold text-on-surface-variant mb-1">총 추천 번호 수</p>
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">내가 저장한 조합 수</p>
                 <p className="font-headline font-black text-2xl text-on-surface">{stats.totalGenerated}개</p>
               </div>
               <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
-                <p className="text-[10px] font-bold text-on-surface-variant mb-1">총 당첨 조합 수</p>
+                <p className="text-[10px] font-bold text-on-surface-variant mb-1">일치 확인된 조합</p>
                 <p className="font-headline font-black text-2xl text-primary">{stats.totalWins}개</p>
-              </div>
-              <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
-                <p className="text-[10px] font-bold text-on-surface-variant mb-1">종합 적중률</p>
-                <p className="font-headline font-black text-2xl text-amber-600">{stats.winRate}%</p>
               </div>
               <div className="bg-surface-container-low rounded-2xl p-4 text-center border border-outline-variant/10 shadow-sm">
                 <p className="text-[10px] font-bold text-on-surface-variant mb-1">5등 이상 당첨</p>
@@ -308,9 +303,13 @@ export default function LuckyHistory() {
               </div>
             </div>
 
+            <p className="text-[11px] leading-relaxed text-on-surface-variant bg-surface-container-low rounded-xl p-3 border border-outline-variant/10">
+              3개 이상 일치는 조합 생성 방식과 무관하게 발생합니다. 이 기록은 서비스의 성능을 나타내지 않습니다.
+            </p>
+
             {/* Rank Distribution breakdown */}
             <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/10 shadow-sm">
-              <h3 className="text-sm font-bold text-on-surface mb-4">등수별 상세 매핑 내역</h3>
+              <h3 className="text-sm font-bold text-on-surface mb-4">등수별 내역</h3>
               <div className="grid grid-cols-5 gap-2 text-center">
                 {Object.entries(stats.wins).map(([rank, count]) => (
                   <div key={rank} className="bg-surface-container-low/60 rounded-xl p-3">
@@ -323,12 +322,12 @@ export default function LuckyHistory() {
 
             {/* Winning Combinations Generated List */}
             <div className="space-y-4">
-              <h3 className="text-base font-bold text-on-surface">앱 배출 당첨 조합 목록</h3>
+              <h3 className="text-base font-bold text-on-surface">내 조합 대조 내역</h3>
               
               {appWinningHistory.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center text-on-surface-variant">
                   <span className="material-symbols-outlined text-5xl opacity-30 mb-3">military_tech</span>
-                  <p className="text-sm font-medium">배출된 당첨 조합이 없습니다.</p>
+                  <p className="text-sm font-medium">일치한 조합이 아직 없습니다.</p>
                   <p className="text-xs opacity-75 mt-1">번호를 생성하고 저장한 뒤, 추첨 시간이 지나면 당첨 결과가 여기에 자동 매핑됩니다.</p>
                 </div>
               ) : (

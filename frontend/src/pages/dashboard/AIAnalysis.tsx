@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import lottoDB from '../../data/lottoDB.json';
-import AdSenseBanner from '../../components/AdSenseBanner';
 
 export default function AIAnalysis() {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ export default function AIAnalysis() {
   };
 
   return (
-    <div className="bg-background text-on-surface font-body min-h-screen pb-32">
+    <div className="bg-background text-on-surface font-body min-h-screen pb-28">
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-surface/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
@@ -27,7 +26,7 @@ export default function AIAnalysis() {
         </div>
       </header>
 
-      <main className="pt-24 px-6 space-y-8 max-w-md mx-auto">
+      <main className="pt-20 px-6 space-y-8 max-w-md mx-auto">
         {/* Mode Selector Segmented Control */}
         <div className="bg-surface-container-low p-1.5 rounded-full flex items-center">
           <Link to="/dashboard" className="flex-1 py-2.5 rounded-full text-sm font-semibold text-center text-on-surface-variant transition-all hover:bg-surface-container-high active:scale-95 duration-200 cursor-pointer">수동 분석</Link>
@@ -42,7 +41,7 @@ export default function AIAnalysis() {
             
             <div className="flex justify-between items-start mb-4 relative z-10">
               <div>
-                <span className="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1 block">신경망 엔진 상태</span>
+                <span className="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-1 block">번호 빈도 집계 상태</span>
                 <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">AI 분석 엔진</h2>
               </div>
               <div className="flex items-center gap-2">
@@ -91,11 +90,11 @@ export default function AIAnalysis() {
             <div className="grid grid-cols-2 gap-4 mt-4 relative z-10">
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                <span className="text-[11px] font-medium text-on-surface-variant">추천 번호 (강세)</span>
+                <span className="text-[11px] font-medium text-on-surface-variant">자주 나온 번호</span>
               </div>
               <div className="flex items-center gap-2 justify-end">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
-                <span className="text-[11px] font-medium text-on-surface-variant">기피 번호 (약세)</span>
+                <span className="text-[11px] font-medium text-on-surface-variant">적게 나온 번호</span>
               </div>
             </div>
           </div>
@@ -108,7 +107,7 @@ export default function AIAnalysis() {
               </div>
               <div>
                 <p className="text-sm font-bold text-on-surface">10년치 패턴 분석 중...</p>
-                <p className="text-xs text-on-surface-variant">과거 520개 회차의 상관관계를 계산하고 있습니다.</p>
+                <p className="text-xs text-on-surface-variant">전체 회차의 번호별 출현 횟수를 세고 있습니다.</p>
               </div>
             </div>
             <div className="bg-surface-container-low rounded-lg p-5 flex items-center gap-4 border-l-4 border-transparent">
@@ -116,17 +115,13 @@ export default function AIAnalysis() {
                 <span className="material-symbols-outlined text-xl" data-icon="auto_awesome">auto_awesome</span>
               </div>
               <div>
-                <p className="text-sm font-bold text-on-surface">최적의 확률 발견</p>
+                <p className="text-sm font-bold text-on-surface">집계 완료</p>
                 <p className="text-xs text-on-surface-variant">최근 미출현 번호와 이월수의 균형을 맞췄습니다.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Google Adsense Banner */}
-        <div className="w-full border border-outline-variant/10 rounded-lg overflow-hidden bg-surface-container-low/30">
-          <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
-        </div>
 
         {/* Dynamic Feedback Text */}
         <div className="text-center py-4">

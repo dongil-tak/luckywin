@@ -134,3 +134,41 @@ Vite의 빌드 산출물(`dist` 디렉토리)을 모바일 네이티브 웹뷰�
      * [카카오 개발자 센터](https://developers.kakao.com/) ➡️ 내 애플리케이션 ➡️ 플랫폼 ➡️ Web 설정의 사이트 도메인 목록에 `https://luckywin.kr` 및 `https://www.luckywin.kr` 추가 등록.
   3. **구글 애드센스 사이트 검토 신청**: 
      * 애드센스 대시보드 ➡️ [사이트] 메뉴에 `luckywin.kr` 추가하고 사이트 소유권 확인 및 검토 요청 제출.
+
+---
+
+## 6. 브랜드 리뉴얼 — 럭키윈(LUCKY WIN) 전환 및 배포 (2026-06-06)
+
+`luckywin.kr` 도메인 확보에 맞춰 서비스 브랜드명을 **윈웨이(Win-Way) → 럭키윈(LUCKY WIN)**으로 전면 교체하고, 이전 검토 보고서([service_ambiguity_review.md](file:///Users/takdi/Desktop/lucky/service_ambiguity_review.md))의 신뢰도/법적 리스크 항목을 수정하여 프로덕션에 배포 완료했습니다.
+
+### 1) 서비스 정합성 리뷰 반영 (4건)
+* **[LuckyHistory.tsx](file:///Users/takdi/Desktop/lucky/frontend/src/pages/more/LuckyHistory.tsx)**: `prizes`에서 하드코딩된 가짜 2·3등 당첨금(Placeholder) 제거, 상세 팝업에 1등 정보만 노출.
+* **[Management.tsx](file:///Users/takdi/Desktop/lucky/frontend/src/pages/fortune/Management.tsx)**: 수학적으로 불가능한 "적중률 83%" 도넛 차트 카드 전체 삭제.
+* **[LottoStore.tsx](file:///Users/takdi/Desktop/lucky/frontend/src/pages/more/LottoStore.tsx)**: 사용자 화면에 노출되던 "연동 데이터 소스/지도 연동 예정" 개발 로드맵 카드 삭제.
+* **[Dashboard.tsx](file:///Users/takdi/Desktop/lucky/frontend/src/pages/dashboard/Dashboard.tsx)**: `localStorage`(`dashboard_draft_sets`) 기반 draft 자동 저장 로직 추가 — "세트 저장" 후 페이지 이탈 시에도 조합 유실되지 않도록 개선, 최종 저장 시 draft 자동 삭제.
+
+### 2) 브랜드명 일괄 교체 — 윈웨이(Win-Way) → 럭키윈(LUCKY WIN)
+* 13개 파일·총 19곳의 `윈웨이(Win-Way)` / `Win-Way` / `윈웨이 분석 시스템` 표기를 `럭키윈(LUCKY WIN)` 계열로 통일 (헤더, 로그인/인증 화면, `index.html` title 및 OG 메타 태그 포함).
+* 공통 헤더 가이드 일관성 점검 중 `LottoStore.tsx`/`LuckyHistory.tsx`에서 다크모드 색상 클래스(`dark:text-amber-400`, `dark:text-stone-50`)가 누락된 것을 발견하고 다른 페이지 기준으로 통일.
+
+### 3) 배포 완료
+* 커밋 `adf18ef` (38개 파일, `+2736/-445`) → `origin/main` 푸시 완료.
+  * 단, `frontend/cookies.txt`(세션 쿠키 데이터)와 엑셀 데이터 파일은 민감/대용량으로 커밋 제외(여전히 untracked).
+* `npx vercel --prod --yes --scope eduvationplan-9198s-projects` 배포 완료 (`https://frontend-one-coral-12.vercel.app`).
+* 배포 후 `<title>럭키윈(LUCKY WIN) - 로또 분석 예측</title>` 정상 노출 확인.
+
+### 4) UI 디자인 검토 (workspace `agents/03_ui` 가이드 기준) — 진행 예정 작업 목록
+[`/Users/takdi/Desktop/workspace/agents/03_ui`](file:///Users/takdi/Desktop/workspace/agents/03_ui) 폴더의 검토 기준(가이드 준수 / 최신 트렌드 / 클릭 최소화)으로 전체 페이지를 점검한 결과, 아래 항목들을 다음 작업으로 진행하면 좋을 것으로 판단됨 (**아직 미작업 — 코드 변경 없음**):
+
+| 등급 | 항목 | 위치 | 내용 |
+|---|---|---|---|
+| 🔴 Critical | 색상 대비 | `text-amber-600`/`text-[#d4af37]` 등 골드 계열이 밝은 배경에 다수 사용 | WCAG AA 4.5:1 기준 충족 여부 실측 필요 |
+| 🔴 Critical | 터치 영역 44px | `LottoStore.tsx` 페이지네이션(`px-3 py-1.5`), `SavedNumbers.tsx` 삭제 버튼(`p-1.5`) | 모바일 최소 터치 영역(44px) 미달 가능성 |
+| 🟠 Major | 하드코딩 HEX (32건) | `Login`, `PasswordStep3/4`, `VerifyEmail`, **`BottomNav`** | `#fbf9f4`=`surface`, `#735c00`=`primary`, `#d4af37`=`primary-container`, `#4d4635`=`on-surface-variant`, `#1b1c19`=`on-background` — **이미 정의된 토�`큰과 정확히 같은 값**을 하드코딩 중. 토큰 치환만 하면 됨 |
+| 🟠 Major | 컴포넌트 중복 | `getNumberColorClass` 함수가 `Dashboard`/`Management`/`AnalysisResults`/`SavedNumbers`/`Statistics` 5개 파일에 동일 코드로 중복 | 공용 `<NumberBall />` 컴포넌트로 추출 권장 |
+| 🟠 Major | 헤더 마크업 중복 | 12개 페이지가 `<header>` JSX를 복붙 | 공용 `<AppHeader />` 추출 권장 (다크모드 클래스 누락 재발 방지) |
+| 🟡 Minor | Glassmorphism 과용 | `backdrop-blur` 계열 15개 파일·총 24회 사용 | 가이드 권장("1~2곳 포인트 사용") 대비 다소 과다 — 의도된 통일 스타일인지 재확인 |
+| 🟡 Minor | 클릭 최소화 (Dashboard) | 번호선택→세트저장(최대5회)→번호저장하기→이메일인증→확인 | "핵심 CTA 3클릭 이하" 기준 초과 가능 (기능 특성상 불가피할 수 있음) |
+| 🟡 Minor | 헤더 패턴 혼재 | 메인 탭은 "브랜드명" 헤더, `Statistics.tsx`는 "뒤로가기+페이지명" 헤더 | 어떤 화면이 어느 패턴을 따를지 기준 문서화 필요 |
+
+**제안 우선순위**: ① 하드코딩 HEX → 토큰 치환 (가장 손쉬움) → ② `getNumberColorClass` 공용화 → ③ 터치영역·색상대비 실측(Critical) → ④ 공용 헤더 추출/Glassmorphism 정리

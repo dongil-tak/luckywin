@@ -50,7 +50,7 @@ export default function Statistics() {
   }, [sortBy]);
 
   return (
-    <div className="bg-background text-on-background min-h-screen pb-32">
+    <div className="bg-background text-on-background min-h-screen pb-28">
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
@@ -61,7 +61,7 @@ export default function Statistics() {
         </div>
       </header>
 
-      <main className="pt-24 px-6 max-w-2xl mx-auto space-y-6">
+      <main className="pt-20 px-6 max-w-2xl mx-auto space-y-6">
         <div className="text-center mb-8">
           <p className="text-sm font-bold text-primary mb-1 tracking-widest uppercase">역대 통합 누적 데이터</p>
           <h2 className="text-xl font-bold font-headline tracking-tight text-on-surface">1등 번호 최다 출현 분석</h2>

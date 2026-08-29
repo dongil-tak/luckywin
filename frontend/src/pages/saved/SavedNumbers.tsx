@@ -112,7 +112,7 @@ export default function SavedNumbers() {
   // 이메일 미인증 상태: 본인확인 게이트 화면
   if (!verifiedEmail) {
     return (
-      <div className="bg-background text-on-surface font-body min-h-screen pb-32">
+      <div className="bg-background text-on-surface font-body min-h-screen pb-28">
         <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-black font-headline text-stone-900 dark:text-stone-50 tracking-tighter">Lucky Win</h1>
@@ -155,7 +155,7 @@ export default function SavedNumbers() {
 
   // 이메일 인증 후 저장 목록 화면
   return (
-    <div className="bg-background text-on-surface font-body min-h-screen pb-32">
+    <div className="bg-background text-on-surface font-body min-h-screen pb-28">
       {/* TopAppBar */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between px-6 bg-white/70 dark:bg-stone-900/70 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50">
         <div className="flex items-center gap-3">
@@ -163,7 +163,7 @@ export default function SavedNumbers() {
         </div>
       </header>
 
-      <main className="pt-24 px-6 max-w-2xl mx-auto">
+      <main className="pt-20 px-6 max-w-2xl mx-auto">
         {/* Title + 본인확인 해제 */}
         <div className="mb-6 flex items-start justify-between gap-3">
           <div>

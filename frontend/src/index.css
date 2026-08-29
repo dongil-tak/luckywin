@@ -5,6 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* iOS Safari 자동 확대 방지 — @layer 밖에 두어야 utilities(text-sm 등)보다 우선 적용됨 */
+input, textarea, select {
+  font-size: 16px;
+}
+
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     display: inline-block;
@@ -34,6 +39,11 @@ body {
     0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
     70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+  }
+  @keyframes loading {
+    0% { width: 0%; }
+    60% { width: 75%; }
+    100% { width: 100%; }
   }
   .radar-line {
     stroke-dasharray: 4;

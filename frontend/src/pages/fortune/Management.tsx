@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
-import AdSenseBanner from '../../components/AdSenseBanner';
 import lottoDB from '../../data/lottoDB.json';
 
 const getNumberColorClass = (n: number) => {
@@ -76,7 +75,7 @@ export default function Management() {
   const formattedDate = `${drawDateObj.getFullYear()}년 ${drawDateObj.getMonth() + 1}월 ${drawDateObj.getDate()}일`;
 
   return (
-    <div className="bg-background text-on-background min-h-screen pb-32">
+    <div className="bg-background text-on-background min-h-screen pb-28">
       {/* Top Navigation Shell */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] h-16 flex items-center justify-between bg-white/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm shadow-stone-200/50 z-50 px-6">
         <div className="flex items-center gap-3">
@@ -87,11 +86,11 @@ export default function Management() {
         </div>
       </header>
 
-      <main className="pt-24 px-6 max-w-2xl mx-auto space-y-8">
+      <main className="pt-20 px-6 max-w-2xl mx-auto space-y-8">
         {/* Section Header */}
         <div className="mb-2">
           <h1 className="text-xl font-bold font-headline tracking-tight text-on-surface mb-2">금주의 당첨현황</h1>
-          <p className="text-on-surface-variant text-sm font-medium">이번 주 당첨 결과를 분석하고 서비스 성과를 확인하세요.</p>
+          <p className="text-on-surface-variant text-sm font-medium">이번 주 당첨 결과와 회차별 기록을 확인하세요.</p>
         </div>
 
         {/* 0. 회차 검색 영역 */}
@@ -182,8 +181,6 @@ export default function Management() {
           </div>
         </div>
 
-        {/* Ad — 당첨번호와 당첨점 정보 사이 */}
-        <AdSenseBanner client="ca-pub-4554368744270377" slot="1076190784" format="fluid" layoutKey="-hi-7+2w-11-86" />
 
         {/* 2. 1등 당첨점 정보 Card */}
         <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_15px_40px_rgba(27,28,25,0.03)] border border-outline-variant/10">
@@ -231,6 +228,15 @@ export default function Management() {
                         store.type === '수동' ? 'bg-purple-100 text-purple-700' :
                         'bg-orange-100 text-orange-700'
                       }`}>{store.type}</span>
+                      <a
+                        href={`https://map.kakao.com/link/search/${encodeURIComponent(store.name)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <span className="material-symbols-outlined text-on-surface-variant text-[16px]">map</span>
+                      </a>
                     </div>
                   </div>
                 ))}
