@@ -1,5 +1,21 @@
 [
   {
+    "round": 1240,
+    "numbers": [
+      11,
+      13,
+      19,
+      20,
+      31,
+      44
+    ],
+    "bonus": 27,
+    "winners": 16,
+    "prizeAmount": 1791817758,
+    "totalSales": null,
+    "drawDate": "2026-09-05"
+  },
+  {
     "round": 1239,
     "numbers": [
       11,
